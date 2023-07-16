@@ -7,17 +7,12 @@ import { ExtendableUriResolver } from "@polywrap/uri-resolver-extensions-js";
 import * as Sys from "@polywrap/sys-config-bundle-js";
 import * as EthProviderV1 from "@polywrap/ethereum-provider-js-v1";
 import * as EthProvider from "@polywrap/ethereum-provider-js";
-import * as ipfsHttpClient from "./embeds/ipfs-http-client/wrap";
-import * as ipfsResolver from "./embeds/async-ipfs-resolver/wrap";
-
-export const ipfsProviders: string[] = [
-  "https://ipfs.wrappers.io",
-  "https://ipfs.io",
-];
 
 export const bundle: Bundle = {
   concurrent: Sys.bundle.concurrent,
   http: Sys.bundle.http,
+  ipfsHttpClient: Sys.bundle.ipfsHttpClient,
+  ipfsResolver: Sys.bundle.ipfsResolver,
   ethereumProviderV1: {
     uri: "plugin/ethereum-provider@1.1.0",
     package: EthProviderV1.plugin({
@@ -61,26 +56,6 @@ export const bundle: Bundle = {
     }) as IWrapPackage,
     implements: ["ens/wraps.eth:ethereum-provider@2.0.0"],
     redirectFrom: ["ens/wraps.eth:ethereum-provider@2.0.0"],
-  },
-  ipfsHttpClient: {
-    uri: "embed/ipfs-http-client@1.0.0",
-    package: ipfsHttpClient.wasmPackage,
-    implements: ["ens/wraps.eth:ipfs-http-client@1.0.0"],
-    redirectFrom: ["ens/wraps.eth:ipfs-http-client@1.0.0"],
-  },
-  ipfsResolver: {
-    uri: "embed/async-ipfs-uri-resolver-ext@1.0.1",
-    package: ipfsResolver.wasmPackage,
-    implements: [
-      "ens/wraps.eth:async-ipfs-uri-resolver-ext@1.0.1",
-      ExtendableUriResolver.defaultExtInterfaceUris[0].uri,
-    ],
-    redirectFrom: ["ens/wraps.eth:async-ipfs-uri-resolver-ext@1.0.1"],
-    env: {
-      provider: ipfsProviders[0],
-      fallbackProviders: ipfsProviders.slice(1),
-      retries: { tryResolveUri: 2, getFile: 2 },
-    },
   },
   ensTextRecordResolver: {
     uri: "ipfs/QmXcHWtKkfrFmcczdMSXH7udsSyV3UJeoWzkaUqGBm1oYs",

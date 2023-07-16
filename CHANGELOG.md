@@ -1,3 +1,9 @@
+# Polywrap Origin (0.12.0-pre.1)
+## Breaking changes
+* [PR-56](https://github.com/polywrap/javascript-client/pull/56) **Wrapscan resolver**
+  * Added the [Wrapscan URI resolver](https://github.com/polywrap/uri-resolver-extensions/tree/master/implementations/wrapscan) as one of the default URI resolvers
+  * You can now use `wrapscan/author/wrap@version` URIs to resolve Wraps published to Wrapscan
+
 # Polywrap Origin (0.11.0)
 ## Features
 **`@polywrap/core-js`:**
