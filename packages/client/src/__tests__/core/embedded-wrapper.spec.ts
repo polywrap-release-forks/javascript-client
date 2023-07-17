@@ -14,8 +14,10 @@ const simpleWrapperUri = `fs/${wrapperPath}`;
 
 describe("Embedded wrapper", () => {
   it("can invoke an embedded wrapper", async () => {
-    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"))
-    const wasmModuleBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.wasm"))
+    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"));
+    const wasmModuleBuffer = fs.readFileSync(
+      path.join(wrapperPath, "wrap.wasm")
+    );
 
     let wrapper: Wrapper = await WasmWrapper.from(
       manifestBuffer,
@@ -33,19 +35,18 @@ describe("Embedded wrapper", () => {
       method: "add",
       args: {
         a: 1,
-        b: 1
+        b: 1,
       },
     });
 
-    if (!result.ok) fail(result.error);
-    expect(result.value).toBeTruthy();
-    expect(typeof result.value).toBe("number");
-    expect(result.value).toEqual(2);
+    expect(result).toStrictEqual(ResultOk(2));
   });
 
   it("can get a file from wrapper", async () => {
-    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"))
-    const wasmModuleBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.wasm"))
+    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"));
+    const wasmModuleBuffer = fs.readFileSync(
+      path.join(wrapperPath, "wrap.wasm")
+    );
     const testFilePath = "hello.txt";
     const testFileText = "Hello Test!";
 
@@ -63,8 +64,10 @@ describe("Embedded wrapper", () => {
   });
 
   it("can add embedded wrapper through file reader", async () => {
-    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"))
-    const wasmModuleBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.wasm"))
+    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"));
+    const wasmModuleBuffer = fs.readFileSync(
+      path.join(wrapperPath, "wrap.wasm")
+    );
     const testFilePath = "hello.txt";
     const testFileText = "Hello Test!";
 
@@ -86,8 +89,10 @@ describe("Embedded wrapper", () => {
   });
 
   it("can add embedded wrapper with async wrap manifest", async () => {
-    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"))
-    const wasmModuleBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.wasm"))
+    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"));
+    const wasmModuleBuffer = fs.readFileSync(
+      path.join(wrapperPath, "wrap.wasm")
+    );
     const testFilePath = "hello.txt";
     const testFileText = "Hello Test!";
 
@@ -109,8 +114,10 @@ describe("Embedded wrapper", () => {
   });
 
   it("can add embedded wrapper with async wasm module", async () => {
-    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"))
-    const wasmModuleBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.wasm"))
+    const manifestBuffer = fs.readFileSync(path.join(wrapperPath, "wrap.info"));
+    const wasmModuleBuffer = fs.readFileSync(
+      path.join(wrapperPath, "wrap.wasm")
+    );
     const testFilePath = "hello.txt";
     const testFileText = "Hello Test!";
 
@@ -148,25 +155,19 @@ const testEmbeddedWrapperWithFile = async (
   const receivedManifestResult = await client.getFile(simpleWrapperUri, {
     path: "wrap.info",
   });
-  if (!receivedManifestResult.ok) fail(receivedManifestResult.error);
-  const receivedManifest = receivedManifestResult.value as Uint8Array;
-  expect(receivedManifest).toEqual(expectedManifest);
+  expect(receivedManifestResult).toEqual(ResultOk(expectedManifest));
 
-  const expectedWasmModule = 
-    await fs.promises.readFile(`${wrapperPath}/wrap.wasm`);
+  const expectedWasmModule = await fs.promises.readFile(
+    `${wrapperPath}/wrap.wasm`
+  );
   const receivedWasmModuleResult = await client.getFile(simpleWrapperUri, {
     path: "wrap.wasm",
   });
-  if (!receivedWasmModuleResult.ok) fail(receivedWasmModuleResult.error);
-  const receivedWasmModule = receivedWasmModuleResult.value as Uint8Array;
-  expect(receivedWasmModule).toEqual(expectedWasmModule);
+  expect(receivedWasmModuleResult).toEqual(ResultOk(expectedWasmModule));
 
   const receivedHelloFileResult = await client.getFile(simpleWrapperUri, {
     path: filePath,
     encoding: "utf-8",
   });
-  if (!receivedHelloFileResult.ok) fail(receivedHelloFileResult.error);
-  const receivedHelloFile = receivedHelloFileResult.value as Uint8Array;
-
-  expect(receivedHelloFile).toEqual(fileText);
+  expect(receivedHelloFileResult).toEqual(ResultOk(fileText));
 };

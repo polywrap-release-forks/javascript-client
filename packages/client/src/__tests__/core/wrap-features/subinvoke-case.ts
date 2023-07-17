@@ -1,6 +1,7 @@
 import { GetPathToTestWrappers } from "@polywrap/test-cases";
 import { PolywrapClientConfigBuilder } from "@polywrap/client-config-builder-js";
 import { PolywrapClient } from "../../../PolywrapClient";
+import { ResultOk } from "@polywrap/result";
 
 export const subinvokeCase = (implementation: string) => {
   describe("wrapper subinvocation", () => {
@@ -23,9 +24,7 @@ export const subinvokeCase = (implementation: string) => {
         },
       });
 
-      if (!response.ok) fail(response.error);
-      expect(response.value).toBeTruthy();
-      expect(response.value).toEqual(3);
+      expect(response).toEqual(ResultOk(3));
     });
   });
 };

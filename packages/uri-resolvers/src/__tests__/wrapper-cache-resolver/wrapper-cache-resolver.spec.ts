@@ -13,6 +13,7 @@ import { RecursiveResolver } from "../../helpers";
 import { PolywrapCoreClient } from "@polywrap/core-client-js";
 import { PluginPackage } from "@polywrap/plugin-js";
 import { WrapperCache, WrapperCacheResolver } from "../../cache";
+import { ResultOk } from "@polywrap/result";
 
 jest.setTimeout(20000);
 
@@ -85,15 +86,14 @@ describe("WrapperCacheResolver", () => {
       "wrapper-without-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/wrapper");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/wrapper",
+        },
+      })
+    );
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({ uri, resolutionContext });
@@ -104,15 +104,14 @@ describe("WrapperCacheResolver", () => {
       "wrapper-with-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/wrapper");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/wrapper",
+        },
+      })
+    );
   });
 
   it("does not cache a URI", async () => {
@@ -134,15 +133,14 @@ describe("WrapperCacheResolver", () => {
       "uri-without-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/to");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/to",
+        },
+      })
+    );
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({ uri, resolutionContext });
@@ -153,15 +151,14 @@ describe("WrapperCacheResolver", () => {
       "uri-without-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/to");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/to",
+        },
+      })
+    );
   });
 
   it("does not cache a package", async () => {
@@ -183,15 +180,14 @@ describe("WrapperCacheResolver", () => {
       "package-without-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "package") {
-      fail("Expected a package, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/package");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "package",
+        uri: {
+          uri: "wrap://test/package",
+        },
+      })
+    );
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({ uri, resolutionContext });
@@ -202,15 +198,14 @@ describe("WrapperCacheResolver", () => {
       "package-without-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "package") {
-      fail("Expected a package, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/package");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "package",
+        uri: {
+          uri: "wrap://test/package",
+        },
+      })
+    );
   });
 
   it("caches the whole resolution path", async () => {
@@ -233,15 +228,14 @@ describe("WrapperCacheResolver", () => {
       "resolution-path-without-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/wrapper");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/wrapper",
+        },
+      })
+    );
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({
@@ -255,15 +249,14 @@ describe("WrapperCacheResolver", () => {
       "resolution-path-A-with-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/A");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/A",
+        },
+      })
+    );
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({
@@ -277,15 +270,14 @@ describe("WrapperCacheResolver", () => {
       "resolution-path-B-with-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/B");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/B",
+        },
+      })
+    );
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({
@@ -299,14 +291,13 @@ describe("WrapperCacheResolver", () => {
       "resolution-path-wrapper-with-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/wrapper");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/wrapper",
+        },
+      })
+    );
   });
 });

@@ -14,6 +14,7 @@ import { PolywrapCoreClient } from "@polywrap/core-client-js";
 import { PluginPackage } from "@polywrap/plugin-js";
 import { ResolutionResultCacheResolver } from "../../cache/ResolutionResultCacheResolver";
 import { ResolutionResultCache } from "../../cache/ResolutionResultCache";
+import { ResultErr, ResultOk } from "@polywrap/result";
 
 jest.setTimeout(20000);
 
@@ -91,15 +92,14 @@ describe("ResolutionResultCacheResolver", () => {
       "wrapper-without-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/wrapper");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/wrapper",
+        },
+      })
+    );
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({ uri, resolutionContext });
@@ -110,15 +110,14 @@ describe("ResolutionResultCacheResolver", () => {
       "wrapper-with-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/wrapper");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/wrapper",
+        },
+      })
+    );
   });
 
   it("caches a resolved URI", async () => {
@@ -140,15 +139,14 @@ describe("ResolutionResultCacheResolver", () => {
       "uri-without-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/to");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/to",
+        },
+      })
+    );
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({ uri, resolutionContext });
@@ -159,15 +157,14 @@ describe("ResolutionResultCacheResolver", () => {
       "uri-with-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/to");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/to",
+        },
+      })
+    );
   });
 
   it("caches a resolved package", async () => {
@@ -189,15 +186,14 @@ describe("ResolutionResultCacheResolver", () => {
       "package-without-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "package") {
-      fail("Expected a package, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/package");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "package",
+        uri: {
+          uri: "wrap://test/package",
+        },
+      })
+    );
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({ uri, resolutionContext });
@@ -208,15 +204,14 @@ describe("ResolutionResultCacheResolver", () => {
       "package-with-cache"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "package") {
-      fail("Expected a package, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/package");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "package",
+        uri: {
+          uri: "wrap://test/package",
+        },
+      })
+    );
   });
 
   it("does not cache error by default", async () => {
@@ -239,10 +234,10 @@ describe("ResolutionResultCacheResolver", () => {
       "error-without-cache"
     );
 
-    if (result.ok) {
-      fail("Expected an error, received: " + result.value.type);
-    }
-    expect((result.error as Error)?.message).toEqual("A test error");
+    expect(result).toMatchObject(ResultErr({}));
+
+    !result.ok &&
+      expect((result.error as Error)?.message).toEqual("A test error");
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({
@@ -256,10 +251,10 @@ describe("ResolutionResultCacheResolver", () => {
       "error-without-cache"
     );
 
-    if (result.ok) {
-      fail("Expected an error, received: " + result.value.type);
-    }
-    expect((result.error as Error)?.message).toEqual("A test error");
+    expect(result).toMatchObject(ResultErr({}));
+
+    !result.ok &&
+      expect((result.error as Error)?.message).toEqual("A test error");
   });
 
   it("caches error if configured", async () => {
@@ -285,10 +280,10 @@ describe("ResolutionResultCacheResolver", () => {
       "error-without-cache"
     );
 
-    if (result.ok) {
-      fail("Expected an error, received: " + result.value.type);
-    }
-    expect((result.error as Error)?.message).toEqual("A test error");
+    expect(result).toMatchObject(ResultErr({}));
+
+    !result.ok &&
+      expect((result.error as Error)?.message).toEqual("A test error");
 
     resolutionContext = new UriResolutionContext();
     result = await client.tryResolveUri({
@@ -302,10 +297,10 @@ describe("ResolutionResultCacheResolver", () => {
       "error-with-cache"
     );
 
-    if (result.ok) {
-      fail("Expected an error, received: " + result.value.type);
-    }
-    expect((result.error as Error)?.message).toEqual("A test error");
+    expect(result).toMatchObject(ResultErr({}));
+
+    !result.ok &&
+      expect((result.error as Error)?.message).toEqual("A test error");
   });
 
   it("keeps the same resolution path after caching", async () => {
