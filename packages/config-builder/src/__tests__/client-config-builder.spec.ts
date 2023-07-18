@@ -174,8 +174,7 @@ describe("Client config builder", () => {
   });
 
   it("should successfully add the default config", async () => {
-    const builder = new PolywrapClientConfigBuilder()
-      .addDefaults();
+    const builder = new PolywrapClientConfigBuilder().addDefaults();
     const config = builder.config;
 
     expect(config).toBeTruthy();
@@ -184,12 +183,9 @@ describe("Client config builder", () => {
     // "sys", "web3"
     const expectedConfig = new PolywrapClientConfigBuilder()
       .addBundle("sys")
-      .addBundle("web3")
-      .config;
+      .addBundle("web3").config;
 
-    expect(JSON.stringify(config)).toBe(
-      JSON.stringify(expectedConfig)
-    );
+    expect(JSON.stringify(config)).toBe(JSON.stringify(expectedConfig));
   });
 
   it("should successfully add an env", () => {
@@ -201,13 +197,13 @@ describe("Client config builder", () => {
       },
     };
 
-    const config = new PolywrapClientConfigBuilder().addEnv(envUri, env).build();
+    const config = new PolywrapClientConfigBuilder()
+      .addEnv(envUri, env)
+      .build();
 
-    if (!config.envs || config.envs.size !== 1) {
-      fail(["Expected 1 env, received:", config.envs]);
-    }
-
-    expect(config.envs.get(Uri.from(envUri))).toEqual(env);
+    expect(config.envs).toBeTruthy();
+    expect(config.envs?.size).toBe(1);
+    expect(config.envs?.get(Uri.from(envUri))).toEqual(env);
   });
 
   it("should successfully add to an existing env", () => {
@@ -228,11 +224,9 @@ describe("Client config builder", () => {
 
     const expectedEnv = { ...env1, ...env2 };
 
-    if (!config.envs || config.envs.size !== 1) {
-      fail(["Expected 1 env, received:", config.envs]);
-    }
-
-    expect(config.envs.get(Uri.from(envUri))).toEqual(expectedEnv);
+    expect(config.envs).toBeTruthy();
+    expect(config.envs?.size).toBe(1);
+    expect(config.envs?.get(Uri.from(envUri))).toEqual(expectedEnv);
   });
 
   it("should succesfully add two separate envs", () => {
@@ -241,14 +235,13 @@ describe("Client config builder", () => {
       .addEnv(Object.keys(testEnvs)[1], Object.values(testEnvs)[1])
       .build();
 
-    if (!config.envs || config.envs.size !== 2) {
-      fail(["Expected 2 envs, received:", config.envs]);
-    }
+    expect(config.envs).toBeTruthy();
+    expect(config.envs?.size).toBe(2);
 
-    expect(config.envs.get(Uri.from(Object.keys(testEnvs)[0]))).toEqual(
+    expect(config.envs?.get(Uri.from(Object.keys(testEnvs)[0]))).toEqual(
       Object.values(testEnvs)[0]
     );
-    expect(config.envs.get(Uri.from(Object.keys(testEnvs)[0]))).toEqual(
+    expect(config.envs?.get(Uri.from(Object.keys(testEnvs)[0]))).toEqual(
       Object.values(testEnvs)[1]
     );
   });
@@ -260,11 +253,10 @@ describe("Client config builder", () => {
       .removeEnv(Object.keys(testEnvs)[0])
       .build();
 
-    if (!config.envs || config.envs.size !== 1) {
-      fail(["Expected 1 env, received:", config.envs]);
-    }
+    expect(config.envs).toBeTruthy();
+    expect(config.envs?.size).toBe(1);
 
-    expect(config.envs.get(Uri.from(Object.keys(testEnvs)[1]))).toEqual(
+    expect(config.envs?.get(Uri.from(Object.keys(testEnvs)[1]))).toEqual(
       Object.values(testEnvs)[1]
     );
   });
@@ -276,13 +268,14 @@ describe("Client config builder", () => {
       foo: "bar",
     };
 
-    const config = new PolywrapClientConfigBuilder().setEnv(envUri, env).build();
+    const config = new PolywrapClientConfigBuilder()
+      .setEnv(envUri, env)
+      .build();
 
-    if (!config.envs || config.envs.size !== 1) {
-      fail(["Expected 1 env, received:", config.envs]);
-    }
+    expect(config.envs).toBeTruthy();
+    expect(config.envs?.size).toBe(1);
 
-    expect(config.envs.get(Uri.from(envUri))).toEqual(env);
+    expect(config.envs?.get(Uri.from(envUri))).toEqual(env);
   });
 
   it("should set an env over an existing env", () => {
@@ -300,11 +293,10 @@ describe("Client config builder", () => {
       .setEnv(envUri, env2)
       .build();
 
-    if (!config.envs || config.envs.size !== 1) {
-      fail(["Expected 1 env, received:", config.envs]);
-    }
+    expect(config.envs).toBeTruthy();
+    expect(config.envs?.size).toBe(1);
 
-    expect(config.envs.get(Uri.from(envUri))).toEqual(env2);
+    expect(config.envs?.get(Uri.from(envUri))).toEqual(env2);
   });
 
   it("should add an interface implementation for a non-existent interface", () => {
@@ -315,9 +307,8 @@ describe("Client config builder", () => {
       .addInterfaceImplementation(interfaceUri, implUri)
       .build();
 
-    if (!config.interfaces || config.interfaces.size !== 1) {
-      fail(["Expected 1 interface, received:", config.interfaces]);
-    }
+    expect(config.interfaces).toBeTruthy();
+    expect(config.interfaces?.size).toBe(1);
 
     expect(config.interfaces).toStrictEqual(
       new UriMap([[Uri.from(interfaceUri), [Uri.from(implUri)]]])
@@ -334,9 +325,8 @@ describe("Client config builder", () => {
       .addInterfaceImplementation(interfaceUri, implUri2)
       .build();
 
-    if (!config.interfaces || config.interfaces.size !== 1) {
-      fail(["Expected 1 interface, received:", config.interfaces]);
-    }
+    expect(config.interfaces).toBeTruthy();
+    expect(config.interfaces?.size).toBe(1);
 
     expect(config.interfaces).toStrictEqual(
       new UriMap([
@@ -360,9 +350,8 @@ describe("Client config builder", () => {
       .addInterfaceImplementation(interfaceUri2, implUri4)
       .build();
 
-    if (!config.interfaces || config.interfaces.size !== 2) {
-      fail(["Expected 2 interfaces, received:", config.interfaces]);
-    }
+    expect(config.interfaces).toBeTruthy();
+    expect(config.interfaces?.size).toBe(2);
 
     expect(config.interfaces).toStrictEqual(
       new UriMap([
@@ -381,9 +370,8 @@ describe("Client config builder", () => {
       .addInterfaceImplementations(interfaceUri, [implUri1, implUri2])
       .build();
 
-    if (!config.interfaces || config.interfaces.size !== 1) {
-      fail(["Expected 1 interface, received:", config.interfaces]);
-    }
+    expect(config.interfaces).toBeTruthy();
+    expect(config.interfaces?.size).toBe(1);
 
     expect(config.interfaces).toStrictEqual(
       new UriMap([
@@ -403,9 +391,8 @@ describe("Client config builder", () => {
       .addInterfaceImplementations(interfaceUri, [implUri2, implUri3])
       .build();
 
-    if (!config.interfaces || config.interfaces.size !== 1) {
-      fail(["Expected 1 interface, received:", config.interfaces]);
-    }
+    expect(config.interfaces).toBeTruthy();
+    expect(config.interfaces?.size).toBe(1);
 
     expect(config.interfaces).toStrictEqual(
       new UriMap([
@@ -434,9 +421,8 @@ describe("Client config builder", () => {
       .addInterfaceImplementations(interfaceUri2, [implUri4, implUri6])
       .build();
 
-    if (!config.interfaces || config.interfaces.size !== 2) {
-      fail(["Expected 2 interfaces, received:", config.interfaces]);
-    }
+    expect(config.interfaces).toBeTruthy();
+    expect(config.interfaces?.size).toBe(2);
 
     expect(config.interfaces).toStrictEqual(
       new UriMap([
@@ -464,9 +450,8 @@ describe("Client config builder", () => {
       .removeInterfaceImplementation(interfaceUri1, implUri2)
       .build();
 
-    if (!config.interfaces || config.interfaces.size !== 2) {
-      fail(["Expected 2 interfaces, received:", config.interfaces]);
-    }
+    expect(config.interfaces).toBeTruthy();
+    expect(config.interfaces?.size).toBe(2);
 
     expect(config.interfaces).toStrictEqual(
       new UriMap([
@@ -489,9 +474,8 @@ describe("Client config builder", () => {
       .removeInterfaceImplementation(interfaceUri1, implUri2)
       .build();
 
-    if (!config.interfaces || config.interfaces.size !== 1) {
-      fail(["Expected 1 interface, received:", config.interfaces]);
-    }
+    expect(config.interfaces).toBeTruthy();
+    expect(config.interfaces?.size).toBe(1);
 
     expect(config.interfaces).toStrictEqual(
       new UriMap([
@@ -703,7 +687,8 @@ describe("Client config builder", () => {
       getManifest: jest.fn(),
     };
 
-    const builderConfig = new PolywrapClientConfigBuilder().setPackage(uri, pkg).config;
+    const builderConfig = new PolywrapClientConfigBuilder().setPackage(uri, pkg)
+      .config;
 
     expect(builderConfig.packages).toStrictEqual({
       [uri]: pkg,
@@ -784,8 +769,10 @@ describe("Client config builder", () => {
       invoke: jest.fn(),
     };
 
-    const builderConfig = new PolywrapClientConfigBuilder().setWrapper(uri, wrapper)
-      .config;
+    const builderConfig = new PolywrapClientConfigBuilder().setWrapper(
+      uri,
+      wrapper
+    ).config;
 
     expect(builderConfig.wrappers).toStrictEqual({
       [uri]: wrapper,

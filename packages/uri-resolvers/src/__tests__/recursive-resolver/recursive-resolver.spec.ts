@@ -11,6 +11,7 @@ import {
 import { expectHistory } from "../helpers/expectHistory";
 import { PolywrapCoreClient } from "@polywrap/core-client-js";
 import { RecursiveResolver } from "../../helpers";
+import { ResultErr, ResultOk } from "@polywrap/result";
 
 jest.setTimeout(20000);
 
@@ -95,15 +96,14 @@ describe("RecursiveResolver", () => {
       "can-recursively-resolve-uri"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a URI, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/4");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/4",
+        },
+      })
+    );
   });
 
   it("does not resolve a uri when not a match", async () => {
@@ -122,15 +122,14 @@ describe("RecursiveResolver", () => {
       "not-a-match"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/not-a-match");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/not-a-match",
+        },
+      })
+    );
   });
 
   it("should raise an error if infinite loop detected during URI Resolution", async () => {
@@ -149,11 +148,11 @@ describe("RecursiveResolver", () => {
       "infinite-loop"
     );
 
-    if (result.ok) {
-      fail(`Expected an error got value: ${result.value}`);
-    }
+    expect(result).toMatchObject(ResultErr({}));
 
     // @ts-ignore
-    expect(result.error!.message).toMatch("An infinite loop was detected while resolving the URI: wrap://test/1");
-  })
+    expect(result.error!.message).toMatch(
+      "An infinite loop was detected while resolving the URI: wrap://test/1"
+    );
+  });
 });

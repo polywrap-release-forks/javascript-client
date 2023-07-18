@@ -7,6 +7,7 @@ import {
 import { expectHistory } from "../helpers/expectHistory";
 import { PolywrapCoreClient } from "@polywrap/core-client-js";
 import { StaticResolver } from "../../static";
+import { ResultOk } from "@polywrap/result";
 
 jest.setTimeout(20000);
 
@@ -32,15 +33,14 @@ describe("StaticResolver", () => {
       "can-redirect-a-uri"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/to");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/to",
+        },
+      })
+    );
   });
 
   it("can resolve a package", async () => {
@@ -64,15 +64,14 @@ describe("StaticResolver", () => {
       "can-resolve-a-package"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "package") {
-      fail("Expected a package, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/package");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "package",
+        uri: {
+          uri: "wrap://test/package",
+        },
+      })
+    );
   });
 
   it("can resolve a wrapper", async () => {
@@ -96,15 +95,14 @@ describe("StaticResolver", () => {
       "can-resolve-a-wrapper"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/wrapper");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/wrapper",
+        },
+      })
+    );
   });
 
   it("can not resolve unregistered uri", async () => {
@@ -123,14 +121,13 @@ describe("StaticResolver", () => {
       "not-a-match"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/not-a-match");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/not-a-match",
+        },
+      })
+    );
   });
 });

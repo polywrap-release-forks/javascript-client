@@ -8,6 +8,7 @@ import { PolywrapClientConfigBuilder } from "@polywrap/client-config-builder-js"
 import { UriResolver } from "@polywrap/uri-resolvers-js";
 import { mockPluginRegistration } from "../../helpers";
 import { GetPathToTestWrappers } from "@polywrap/test-cases";
+import { ResultOk } from "@polywrap/result";
 
 jest.setTimeout(200000);
 
@@ -38,12 +39,10 @@ export const interfaceInvokeCase = (implementation: string) => {
         },
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toBeTruthy();
-      expect(result.value).toEqual({
+      expect(result).toEqual(ResultOk({
         uint8: 1,
         str: "Test String 1",
-      });
+      }));
     });
   });
 
@@ -77,11 +76,10 @@ export const interfaceInvokeCase = (implementation: string) => {
         applyResolution: false,
       });
 
-      if (!implementations.ok) fail(implementations.error);
-      expect(implementations.value).toEqual([
+      expect(implementations).toEqual(ResultOk([
         implementation1Uri,
         implementation2Uri,
-      ]);
+      ]));
     });
 
     it("should get all implementations of interface", async () => {
@@ -133,25 +131,22 @@ export const interfaceInvokeCase = (implementation: string) => {
         applyResolution: true,
       });
 
-      if (!implementations1.ok) fail(implementations1.error);
-      expect(implementations1.value).toEqual([
+      expect(implementations1).toEqual(ResultOk([
         implementation1Uri,
         implementation2Uri,
         implementation3Uri,
-      ]);
+      ]));
 
-      if (!implementations2.ok) fail(implementations2.error);
-      expect(implementations2.value).toEqual([
+      expect(implementations2).toEqual(ResultOk([
         implementation1Uri,
         implementation2Uri,
         implementation3Uri,
-      ]);
+      ]));
 
-      if (!implementations3.ok) fail(implementations3.error);
-      expect(implementations3.value).toEqual([
+      expect(implementations3).toEqual(ResultOk([
         implementation3Uri,
         implementation4Uri,
-      ]);
+      ]));
     });
 
     it("should merge user-defined interface implementations with each other", async () => {
@@ -225,8 +220,7 @@ export const interfaceInvokeCase = (implementation: string) => {
         { applyResolution: true }
       );
 
-      if (!getImplementationsResult.ok) fail(getImplementationsResult.error);
-      expect(getImplementationsResult.value).toEqual([implementation2Uri]);
+      expect(getImplementationsResult).toEqual(ResultOk([implementation2Uri]));
     });
 
     test("get implementations - return implementations for plugins which don't have interface stated in manifest", async () => {
@@ -253,11 +247,10 @@ export const interfaceInvokeCase = (implementation: string) => {
         { applyResolution: true }
       );
 
-      if (!getImplementationsResult.ok) fail(getImplementationsResult.error);
-      expect(getImplementationsResult.value).toEqual([
+      expect(getImplementationsResult).toEqual(ResultOk([
         implementation1Uri,
         implementation2Uri,
-      ]);
+      ]));
     });
 
     test("getImplementations - pass string or Uri", async () => {
@@ -283,26 +276,22 @@ export const interfaceInvokeCase = (implementation: string) => {
       let result = await client.getImplementations(oldInterfaceUri, {
         applyResolution: false,
       });
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual([implementation1Uri]);
+      expect(result).toEqual(ResultOk([implementation1Uri]));
 
       result = await client.getImplementations(oldInterfaceUri, {
         applyResolution: true,
       });
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual([implementation1Uri, implementation2Uri]);
+      expect(result).toEqual(ResultOk([implementation1Uri, implementation2Uri]));
 
       let result2 = await client.getImplementations(oldInterfaceUri, {
         applyResolution: false,
       });
-      if (!result2.ok) fail(result2.error);
-      expect(result2.value).toEqual([implementation1Uri]);
+      expect(result2).toEqual(ResultOk([implementation1Uri]));
 
       result2 = await client.getImplementations(oldInterfaceUri, {
         applyResolution: true,
       });
-      if (!result2.ok) fail(result2.error);
-      expect(result2.value).toEqual([implementation1Uri, implementation2Uri]);
+      expect(result2).toEqual(ResultOk([implementation1Uri, implementation2Uri]));
     });
   });
 };
