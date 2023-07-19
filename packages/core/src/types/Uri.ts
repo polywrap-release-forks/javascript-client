@@ -175,6 +175,18 @@ export class Uri {
 
     // Extract the authority and path
     const authority = parts[0];
+
+    // Authority should begin with a word character (alphanumeric, underscore)
+    const validAuthorityRegExp = /^\w.*/;
+    if (!validAuthorityRegExp.test(authority)) {
+      return ResultErr(
+        Error(
+          `URI authority must start with an alphanumeric character or an underscore.\n` +
+            `Invalid URI Received: ${input}`
+        )
+      );
+    }
+
     const path = parts.slice(1).join("/");
 
     if (!path) {
