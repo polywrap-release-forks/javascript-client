@@ -78,4 +78,10 @@ describe("Uri", () => {
     expect(uri.authority).toEqual("authority");
     expect(uri.path).toEqual("something?uri=wrap://something/something2");
   });
+
+  it("Shouldn't accept authorities that don't start with alphanumeric characters", () => {
+    expect(() => {
+      new Uri("../invalid/path");
+    }).toThrow(/URI authority must start with an alphanumeric character or an underscore\./);
+  });
 });
