@@ -21,26 +21,49 @@ export const bundle: Bundle = {
   logger: {
     uri: "plugin/logger@1.0.0",
     package: loggerPlugin({}) as IWrapPackage,
-    implements: ["ens/wraps.eth:logger@1.0.0"],
-    redirectFrom: ["ens/wraps.eth:logger@1.0.0"],
+    implements: ["wrapscan/polywrap/logger@1.0", "ens/wraps.eth:logger@1.0.0"],
+    redirectFrom: [
+      "wrapscan/polywrap/logger@1.0",
+      "ens/wraps.eth:logger@1.0.0",
+    ],
   },
   datetime: {
     uri: "plugin/datetime@1.0.0",
     package: dateTimePlugin({}) as IWrapPackage,
-    implements: ["ens/wraps.eth:datetime@1.0.0"],
-    redirectFrom: ["ens/wraps.eth:datetime@1.0.0"],
+    implements: [
+      "wrapscan/polywrap/datetime@1.0",
+      "ens/wraps.eth:datetime@1.0.0",
+    ],
+    redirectFrom: [
+      "wrapscan/polywrap/datetime@1.0",
+      "ens/wraps.eth:datetime@1.0.0",
+    ],
   },
   concurrent: {
     uri: "plugin/concurrent@1.0.0",
     package: concurrentPromisePlugin({}) as IWrapPackage,
-    implements: ["ens/wraps.eth:concurrent@1.0.0"],
-    redirectFrom: ["ens/wraps.eth:concurrent@1.0.0"],
+    implements: [
+      "wrapscan/polywrap/concurrent@1.0",
+      "ens/wraps.eth:concurrent@1.0.0",
+    ],
+    redirectFrom: [
+      "wrapscan/polywrap/concurrent@1.0",
+      "ens/wraps.eth:concurrent@1.0.0",
+    ],
   },
   http: {
     uri: "plugin/http@1.1.0",
     package: httpPlugin({}) as IWrapPackage,
-    implements: ["ens/wraps.eth:http@1.1.0", "ens/wraps.eth:http@1.0.0"],
-    redirectFrom: ["ens/wraps.eth:http@1.1.0", "ens/wraps.eth:http@1.0.0"],
+    implements: [
+      "wrapscan/polywrap/http@1.0",
+      "ens/wraps.eth:http@1.1.0",
+      "ens/wraps.eth:http@1.0.0",
+    ],
+    redirectFrom: [
+      "wrapscan/polywrap/http@1.0",
+      "ens/wraps.eth:http@1.1.0",
+      "ens/wraps.eth:http@1.0.0",
+    ],
   },
   githubResolver: {
     uri: "wrap://ipfs/QmYPp2bQpRxR7WCoiAgWsWoiQzqxyFdqWxp1i65VW8wNv2",
@@ -52,6 +75,7 @@ export const bundle: Bundle = {
     implements: [
       "ens/wraps.eth:http-uri-resolver-ext@1.0.1",
       ExtendableUriResolver.defaultExtInterfaceUris[0].uri,
+      ExtendableUriResolver.defaultExtInterfaceUris[2].uri,
     ],
     redirectFrom: ["ens/wraps.eth:http-uri-resolver-ext@1.0.1"],
   },
@@ -66,8 +90,14 @@ export const bundle: Bundle = {
   ipfsHttpClient: {
     uri: "embed/ipfs-http-client@1.0.0",
     package: ipfsHttpClient.wasmPackage,
-    implements: ["ens/wraps.eth:ipfs-http-client@1.0.0"],
-    redirectFrom: ["ens/wraps.eth:ipfs-http-client@1.0.0"],
+    implements: [
+      "wrapscan/polywrap/ipfs-http-client@1.0",
+      "ens/wraps.eth:ipfs-http-client@1.0.0",
+    ],
+    redirectFrom: [
+      "wrapscan/polywrap/ipfs-http-client@1.0",
+      "ens/wraps.eth:ipfs-http-client@1.0.0",
+    ],
   },
   ipfsResolver: {
     uri: "embed/async-ipfs-uri-resolver-ext@1.0.1",
@@ -75,6 +105,7 @@ export const bundle: Bundle = {
     implements: [
       "ens/wraps.eth:async-ipfs-uri-resolver-ext@1.0.1",
       ExtendableUriResolver.defaultExtInterfaceUris[0].uri,
+      ExtendableUriResolver.defaultExtInterfaceUris[2].uri,
     ],
     redirectFrom: ["ens/wraps.eth:async-ipfs-uri-resolver-ext@1.0.1"],
     env: {
