@@ -21,9 +21,9 @@ export const bundle: Bundle = {
   logger: {
     uri: "plugin/logger@1.0.0",
     package: loggerPlugin({}) as IWrapPackage,
-    implements: ["wrapscan/polywrap/logger@1.0", "ens/wraps.eth:logger@1.0.0"],
+    implements: ["wrapscan.io/polywrap/logger@1.0", "ens/wraps.eth:logger@1.0.0"],
     redirectFrom: [
-      "wrapscan/polywrap/logger@1.0",
+      "wrapscan.io/polywrap/logger@1.0",
       "ens/wraps.eth:logger@1.0.0",
     ],
   },
@@ -31,11 +31,11 @@ export const bundle: Bundle = {
     uri: "plugin/datetime@1.0.0",
     package: dateTimePlugin({}) as IWrapPackage,
     implements: [
-      "wrapscan/polywrap/datetime@1.0",
+      "wrapscan.io/polywrap/datetime@1.0",
       "ens/wraps.eth:datetime@1.0.0",
     ],
     redirectFrom: [
-      "wrapscan/polywrap/datetime@1.0",
+      "wrapscan.io/polywrap/datetime@1.0",
       "ens/wraps.eth:datetime@1.0.0",
     ],
   },
@@ -43,11 +43,11 @@ export const bundle: Bundle = {
     uri: "plugin/concurrent@1.0.0",
     package: concurrentPromisePlugin({}) as IWrapPackage,
     implements: [
-      "wrapscan/polywrap/concurrent@1.0",
+      "wrapscan.io/polywrap/concurrent@1.0",
       "ens/wraps.eth:concurrent@1.0.0",
     ],
     redirectFrom: [
-      "wrapscan/polywrap/concurrent@1.0",
+      "wrapscan.io/polywrap/concurrent@1.0",
       "ens/wraps.eth:concurrent@1.0.0",
     ],
   },
@@ -55,12 +55,12 @@ export const bundle: Bundle = {
     uri: "plugin/http@1.1.0",
     package: httpPlugin({}) as IWrapPackage,
     implements: [
-      "wrapscan/polywrap/http@1.0",
+      "wrapscan.io/polywrap/http@1.0",
       "ens/wraps.eth:http@1.1.0",
       "ens/wraps.eth:http@1.0.0",
     ],
     redirectFrom: [
-      "wrapscan/polywrap/http@1.0",
+      "wrapscan.io/polywrap/http@1.0",
       "ens/wraps.eth:http@1.1.0",
       "ens/wraps.eth:http@1.0.0",
     ],
@@ -82,20 +82,20 @@ export const bundle: Bundle = {
   wrapscanResolver: {
     uri: "https://wraps.wrapscan.io/r/polywrap/wrapscan-uri-resolver@1.0",
     implements: [
-      "wrapscan/polywrap/wrapscan-uri-resolver@1.0",
+      "wrapscan.io/polywrap/wrapscan-uri-resolver@1.0",
       ExtendableUriResolver.defaultExtInterfaceUris[2].uri,
     ],
-    redirectFrom: ["wrapscan/polywrap/wrapscan-uri-resolver@1.0"],
+    redirectFrom: ["wrapscan.io/polywrap/wrapscan-uri-resolver@1.0"],
   },
   ipfsHttpClient: {
     uri: "embed/ipfs-http-client@1.0.0",
     package: ipfsHttpClient.wasmPackage,
     implements: [
-      "wrapscan/polywrap/ipfs-http-client@1.0",
+      "wrapscan.io/polywrap/ipfs-http-client@1.0",
       "ens/wraps.eth:ipfs-http-client@1.0.0",
     ],
     redirectFrom: [
-      "wrapscan/polywrap/ipfs-http-client@1.0",
+      "wrapscan.io/polywrap/ipfs-http-client@1.0",
       "ens/wraps.eth:ipfs-http-client@1.0.0",
     ],
   },
