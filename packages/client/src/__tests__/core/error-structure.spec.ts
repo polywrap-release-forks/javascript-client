@@ -88,11 +88,11 @@ describe("Error structure", () => {
       expect(result.error?.innerError instanceof WrapError).toBeTruthy();
       const prev = result.error?.innerError as WrapError;
       expect(prev.name).toEqual("WrapError");
-      expect(prev.code).toEqual(WrapErrorCode.WRAPPER_INVOKE_ABORTED);
+      expect(prev.code).toEqual(WrapErrorCode.URI_NOT_FOUND);
       expect(prev.reason).toContain(
-        "A URI Resolver returned an error."
+        "Unable to find URI wrap://authority/imported-invoke"
       );
-      expect(prev.uri).toEqual("wrap://embed/http-uri-resolver@1.0.0");
+      expect(prev.uri).toEqual("wrap://authority/imported-invoke");
     });
 
     describe("Wasm wrapper - Assemblyscript", () => {
