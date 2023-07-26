@@ -39,7 +39,7 @@ describe("plugin-wrapper", () => {
   };
 
   test("plugin map types", async () => {
-    const implementationUri = Uri.from("wrap://ens/some-implementation.eth");
+    const implementationUri = Uri.from("wrap://authority/some-implementation");
     const mockPlugin = mockMapPlugin();
     const client = new PolywrapClient({
       resolver: UriResolver.from([

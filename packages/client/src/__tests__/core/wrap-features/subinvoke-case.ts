@@ -11,7 +11,7 @@ export const subinvokeCase = (implementation: string) => {
 
       const config = new PolywrapClientConfigBuilder()
         .addDefaults()
-        .setRedirect("ens/imported-subinvoke.eth", subinvokeUri)
+        .setRedirect("authority/imported-subinvoke", subinvokeUri)
         .build();
       const client = new PolywrapClient(config);
 

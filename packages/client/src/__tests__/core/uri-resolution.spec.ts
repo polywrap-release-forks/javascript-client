@@ -29,7 +29,7 @@ const expectResolutionResult = async (
 
 describe("URI resolution", () => {
   it("sanity", async () => {
-    const uri = new Uri("ens/wraps.eth:uri-resolver-ext@1.1.0");
+    const uri = new Uri("wrapscan.io/polywrap/uri-resolver@1.0.0");
 
     const client = new PolywrapClient();
 
@@ -51,8 +51,8 @@ describe("URI resolution", () => {
   });
 
   it("can resolve uri with custom resolver", async () => {
-    const fromUri = new Uri(`test/from.eth`);
-    const redirectUri = new Uri(`test/to.eth`);
+    const fromUri = new Uri(`test/from`);
+    const redirectUri = new Uri(`test/to`);
 
     const config = new PolywrapClientConfigBuilder()
       .addDefaults()

@@ -12,7 +12,7 @@ export const typeTestCases = (implementation: string) => {
       const config = new PolywrapClientConfigBuilder()
         .addDefaults()
         .setPackage(
-          "wrap://ens/memory-storage.polywrap.eth",
+          "wrap://plugin/memory-storage",
           memoryStoragePlugin()
         )
         .build();

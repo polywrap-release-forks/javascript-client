@@ -32,31 +32,31 @@ describe("Client config builder", () => {
   const emptyBuilderConfig = new PolywrapClientConfigBuilder().config;
 
   const testEnv1: Record<string, Record<string, unknown>> = {
-    "wrap://ens/test.plugin.one": { test: "value" },
+    "wrap://authority/test.plugin.one": { test: "value" },
   };
 
   const testEnv2: Record<string, Record<string, unknown>> = {
-    "wrap://ens/test.plugin.two": { test: "value" },
+    "wrap://authority/test.plugin.two": { test: "value" },
   };
 
   const testInterface1: Record<string, Set<string>> = {
-    "wrap://ens/test-interface-1.polywrap.eth": new Set([
-      "wrap://ens/test1.polywrap.eth",
+    "wrap://authority/test-interface-1.polywrap": new Set([
+      "wrap://authority/test1.polywrap",
     ]),
   };
 
   const testInterface2: Record<string, Set<string>> = {
-    "wrap://ens/test-interface-2.polywrap.eth": new Set([
-      "wrap://ens/test2.polywrap.eth",
+    "wrap://authority/test-interface-2.polywrap": new Set([
+      "wrap://authority/test2.polywrap",
     ]),
   };
 
   const testUriRedirect1 = {
-    "wrap://ens/test-one.polywrap.eth": "wrap://ens/test1.polywrap.eth",
+    "wrap://authority/test-one.polywrap": "wrap://authority/test1.polywrap",
   };
 
   const testUriRedirect2 = {
-    "wrap://ens/test-two.polywrap.eth": "wrap://ens/test2.polywrap.eth",
+    "wrap://authority/test-two.polywrap": "wrap://authority/test2.polywrap",
   };
 
   const testEnvs: Record<string, Record<string, unknown>> = {
@@ -75,8 +75,8 @@ describe("Client config builder", () => {
   };
 
   const testUriResolver: IUriResolver = new MockUriResolver(
-    "wrap://ens/testFrom.eth",
-    "wrap://ens/testTo.eth"
+    "wrap://authority/testFrom",
+    "wrap://authority/testTo"
   );
 
   it("should build an empty partial config", () => {
@@ -102,19 +102,19 @@ describe("Client config builder", () => {
     expect(clientConfig).toBeTruthy();
     expect(clientConfig.envs).toStrictEqual(
       new UriMap([
-        [Uri.from("wrap://ens/test.plugin.one"), { test: "value" }],
-        [Uri.from("wrap://ens/test.plugin.two"), { test: "value" }],
+        [Uri.from("wrap://authority/test.plugin.one"), { test: "value" }],
+        [Uri.from("wrap://authority/test.plugin.two"), { test: "value" }],
       ])
     );
     expect(clientConfig.interfaces).toStrictEqual(
       new UriMap([
         [
-          Uri.from("wrap://ens/test-interface-1.polywrap.eth"),
-          [Uri.from("wrap://ens/test1.polywrap.eth")],
+          Uri.from("wrap://authority/test-interface-1.polywrap"),
+          [Uri.from("wrap://authority/test1.polywrap")],
         ],
         [
-          Uri.from("wrap://ens/test-interface-2.polywrap.eth"),
-          [Uri.from("wrap://ens/test2.polywrap.eth")],
+          Uri.from("wrap://authority/test-interface-2.polywrap"),
+          [Uri.from("wrap://authority/test2.polywrap")],
         ],
       ])
     );
@@ -145,19 +145,19 @@ describe("Client config builder", () => {
     expect(clientConfig).toBeTruthy();
     expect(clientConfig.envs).toStrictEqual(
       new UriMap([
-        [Uri.from("wrap://ens/test.plugin.one"), { test: "value" }],
-        [Uri.from("wrap://ens/test.plugin.two"), { test: "value" }],
+        [Uri.from("wrap://authority/test.plugin.one"), { test: "value" }],
+        [Uri.from("wrap://authority/test.plugin.two"), { test: "value" }],
       ])
     );
     expect(clientConfig.interfaces).toStrictEqual(
       new UriMap([
         [
-          Uri.from("wrap://ens/test-interface-1.polywrap.eth"),
-          [Uri.from("wrap://ens/test1.polywrap.eth")],
+          Uri.from("wrap://authority/test-interface-1.polywrap"),
+          [Uri.from("wrap://authority/test1.polywrap")],
         ],
         [
-          Uri.from("wrap://ens/test-interface-2.polywrap.eth"),
-          [Uri.from("wrap://ens/test2.polywrap.eth")],
+          Uri.from("wrap://authority/test-interface-2.polywrap"),
+          [Uri.from("wrap://authority/test2.polywrap")],
         ],
       ])
     );
@@ -189,7 +189,7 @@ describe("Client config builder", () => {
   });
 
   it("should successfully add an env", () => {
-    const envUri = "wrap://ens/some-plugin.polywrap.eth";
+    const envUri = "wrap://authority/some-plugin.polywrap";
     const env = {
       foo: "bar",
       baz: {
@@ -207,7 +207,7 @@ describe("Client config builder", () => {
   });
 
   it("should successfully add to an existing env", () => {
-    const envUri = "wrap://ens/some-plugin.polywrap.eth";
+    const envUri = "wrap://authority/some-plugin.polywrap";
     const env1 = {
       foo: "bar",
     };
@@ -262,7 +262,7 @@ describe("Client config builder", () => {
   });
 
   it("should set an env", () => {
-    const envUri = "wrap://ens/some.plugin.eth";
+    const envUri = "wrap://authority/some.plugin";
 
     const env = {
       foo: "bar",
@@ -279,7 +279,7 @@ describe("Client config builder", () => {
   });
 
   it("should set an env over an existing env", () => {
-    const envUri = "wrap://ens/some.plugin.eth";
+    const envUri = "wrap://authority/some.plugin";
 
     const env1 = {
       foo: "bar",
@@ -300,8 +300,8 @@ describe("Client config builder", () => {
   });
 
   it("should add an interface implementation for a non-existent interface", () => {
-    const interfaceUri = "wrap://ens/some.interface.eth";
-    const implUri = "wrap://ens/interface.impl.eth";
+    const interfaceUri = "wrap://authority/some.interface";
+    const implUri = "wrap://authority/interface.impl";
 
     const config = new PolywrapClientConfigBuilder()
       .addInterfaceImplementation(interfaceUri, implUri)
@@ -316,9 +316,9 @@ describe("Client config builder", () => {
   });
 
   it("should add an interface implementation for an interface that already exists", () => {
-    const interfaceUri = "wrap://ens/some.interface.eth";
-    const implUri1 = "wrap://ens/interface.impl1.eth";
-    const implUri2 = "wrap://ens/interface.impl2.eth";
+    const interfaceUri = "wrap://authority/some.interface";
+    const implUri1 = "wrap://authority/interface.impl1";
+    const implUri2 = "wrap://authority/interface.impl2";
 
     const config = new PolywrapClientConfigBuilder()
       .addInterfaceImplementation(interfaceUri, implUri1)
@@ -336,12 +336,12 @@ describe("Client config builder", () => {
   });
 
   it("should add different implementations for different interfaces", () => {
-    const interfaceUri1 = "wrap://ens/some.interface1.eth";
-    const interfaceUri2 = "wrap://ens/some.interface2.eth";
-    const implUri1 = "wrap://ens/interface.impl1.eth";
-    const implUri2 = "wrap://ens/interface.impl2.eth";
-    const implUri3 = "wrap://ens/interface.impl3.eth";
-    const implUri4 = "wrap://ens/interface.impl4.eth";
+    const interfaceUri1 = "wrap://authority/some.interface1";
+    const interfaceUri2 = "wrap://authority/some.interface2";
+    const implUri1 = "wrap://authority/interface.impl1";
+    const implUri2 = "wrap://authority/interface.impl2";
+    const implUri3 = "wrap://authority/interface.impl3";
+    const implUri4 = "wrap://authority/interface.impl4";
 
     const config = new PolywrapClientConfigBuilder()
       .addInterfaceImplementation(interfaceUri1, implUri1)
@@ -362,9 +362,9 @@ describe("Client config builder", () => {
   });
 
   it("should add multiple implementations for a non-existent interface", () => {
-    const interfaceUri = "wrap://ens/some.interface.eth";
-    const implUri1 = "wrap://ens/interface.impl1.eth";
-    const implUri2 = "wrap://ens/interface.impl2.eth";
+    const interfaceUri = "wrap://authority/some.interface";
+    const implUri1 = "wrap://authority/interface.impl1";
+    const implUri2 = "wrap://authority/interface.impl2";
 
     const config = new PolywrapClientConfigBuilder()
       .addInterfaceImplementations(interfaceUri, [implUri1, implUri2])
@@ -381,10 +381,10 @@ describe("Client config builder", () => {
   });
 
   it("should add multiple implementations for an existing interface", () => {
-    const interfaceUri = "wrap://ens/some.interface.eth";
-    const implUri1 = "wrap://ens/interface.impl1.eth";
-    const implUri2 = "wrap://ens/interface.impl2.eth";
-    const implUri3 = "wrap://ens/interface.impl3.eth";
+    const interfaceUri = "wrap://authority/some.interface";
+    const implUri1 = "wrap://authority/interface.impl1";
+    const implUri2 = "wrap://authority/interface.impl2";
+    const implUri3 = "wrap://authority/interface.impl3";
 
     const config = new PolywrapClientConfigBuilder()
       .addInterfaceImplementations(interfaceUri, [implUri1])
@@ -405,14 +405,14 @@ describe("Client config builder", () => {
   });
 
   it("should add multiple different implementations for different interfaces", () => {
-    const interfaceUri1 = "wrap://ens/some.interface1.eth";
-    const interfaceUri2 = "wrap://ens/some.interface2.eth";
-    const implUri1 = "wrap://ens/interface.impl1.eth";
-    const implUri2 = "wrap://ens/interface.impl2.eth";
-    const implUri3 = "wrap://ens/interface.impl3.eth";
-    const implUri4 = "wrap://ens/interface.impl4.eth";
-    const implUri5 = "wrap://ens/interface.impl5.eth";
-    const implUri6 = "wrap://ens/interface.impl6.eth";
+    const interfaceUri1 = "wrap://authority/some.interface1";
+    const interfaceUri2 = "wrap://authority/some.interface2";
+    const implUri1 = "wrap://authority/interface.impl1";
+    const implUri2 = "wrap://authority/interface.impl2";
+    const implUri3 = "wrap://authority/interface.impl3";
+    const implUri4 = "wrap://authority/interface.impl4";
+    const implUri5 = "wrap://authority/interface.impl5";
+    const implUri6 = "wrap://authority/interface.impl6";
 
     const config = new PolywrapClientConfigBuilder()
       .addInterfaceImplementation(interfaceUri1, implUri1)
@@ -439,10 +439,10 @@ describe("Client config builder", () => {
   });
 
   it("should remove an interface implementation", () => {
-    const interfaceUri1 = "wrap://ens/some.interface1.eth";
-    const interfaceUri2 = "wrap://ens/some.interface2.eth";
-    const implUri1 = "wrap://ens/interface.impl1.eth";
-    const implUri2 = "wrap://ens/interface.impl2.eth";
+    const interfaceUri1 = "wrap://authority/some.interface1";
+    const interfaceUri2 = "wrap://authority/some.interface2";
+    const implUri1 = "wrap://authority/interface.impl1";
+    const implUri2 = "wrap://authority/interface.impl2";
 
     const config = new PolywrapClientConfigBuilder()
       .addInterfaceImplementations(interfaceUri1, [implUri1, implUri2])
@@ -462,10 +462,10 @@ describe("Client config builder", () => {
   });
 
   it("should completely remove an interface if there are no implementations left", () => {
-    const interfaceUri1 = "wrap://ens/some.interface1.eth";
-    const interfaceUri2 = "wrap://ens/some.interface2.eth";
-    const implUri1 = "wrap://ens/interface.impl1.eth";
-    const implUri2 = "wrap://ens/interface.impl2.eth";
+    const interfaceUri1 = "wrap://authority/some.interface1";
+    const interfaceUri2 = "wrap://authority/some.interface2";
+    const implUri1 = "wrap://authority/interface.impl1";
+    const implUri2 = "wrap://authority/interface.impl2";
 
     const config = new PolywrapClientConfigBuilder()
       .addInterfaceImplementations(interfaceUri1, [implUri1, implUri2])
@@ -485,8 +485,8 @@ describe("Client config builder", () => {
   });
 
   it("should add an uri redirect", () => {
-    const from = "wrap://ens/from.this.ens";
-    const to = "wrap://ens/to.that.ens";
+    const from = "wrap://authority/from.this.ens";
+    const to = "wrap://authority/to.that.ens";
 
     const builder = new PolywrapClientConfigBuilder().setRedirect(from, to);
 
@@ -503,10 +503,10 @@ describe("Client config builder", () => {
   });
 
   it("should add two uri redirects with different from uris", () => {
-    const from1 = "wrap://ens/from.this1.ens";
-    const to1 = "wrap://ens/to.that1.ens";
-    const from2 = "wrap://ens/from.this2.ens";
-    const to2 = "wrap://ens/to.that2.ens";
+    const from1 = "wrap://authority/from.this1.ens";
+    const to1 = "wrap://authority/to.that1.ens";
+    const from2 = "wrap://authority/from.this2.ens";
+    const to2 = "wrap://authority/to.that2.ens";
 
     const builder = new PolywrapClientConfigBuilder()
       .setRedirect(from1, to1)
@@ -526,10 +526,10 @@ describe("Client config builder", () => {
   });
 
   it("should overwrite an existing uri redirect if from matches on add", () => {
-    const from1 = "wrap://ens/from1.this.ens";
-    const from2 = "wrap://ens/from2.this.ens";
-    const to1 = "wrap://ens/to.that1.ens";
-    const to2 = "wrap://ens/to.that2.ens";
+    const from1 = "wrap://authority/from1.this.ens";
+    const from2 = "wrap://authority/from2.this.ens";
+    const to1 = "wrap://authority/to.that1.ens";
+    const to2 = "wrap://authority/to.that2.ens";
 
     const builder = new PolywrapClientConfigBuilder()
       .setRedirect(from1, to1)
@@ -550,10 +550,10 @@ describe("Client config builder", () => {
   });
 
   it("should remove an uri redirect", () => {
-    const from1 = "wrap://ens/from.this1.ens";
-    const to1 = "wrap://ens/to.that1.ens";
-    const from2 = "wrap://ens/from.this2.ens";
-    const to2 = "wrap://ens/to.that2.ens";
+    const from1 = "wrap://authority/from.this1.ens";
+    const to1 = "wrap://authority/to.that1.ens";
+    const from2 = "wrap://authority/from.this2.ens";
+    const to2 = "wrap://authority/to.that2.ens";
     const builder = new PolywrapClientConfigBuilder()
       .setRedirect(from1, to1)
       .setRedirect(from2, to2)
@@ -573,8 +573,8 @@ describe("Client config builder", () => {
 
   it("should set uri resolver", () => {
     const uriResolver = new MockUriResolver(
-      "wrap://ens/from.eth",
-      "wrap://ens/to.eth"
+      "wrap://authority/from",
+      "wrap://authority/to"
     );
 
     const builder = new PolywrapClientConfigBuilder().addResolver(uriResolver);
@@ -588,12 +588,12 @@ describe("Client config builder", () => {
 
   it("should add multiple resolvers", () => {
     const uriResolver1 = new MockUriResolver(
-      "wrap://ens/from1.eth",
-      "wrap://ens/to1.eth"
+      "wrap://authority/from1",
+      "wrap://authority/to1"
     );
     const uriResolver2 = new MockUriResolver(
-      "wrap://ens/from2.eth",
-      "wrap://ens/to2.eth"
+      "wrap://authority/from2",
+      "wrap://authority/to2"
     );
 
     const builder = new PolywrapClientConfigBuilder()
@@ -609,8 +609,8 @@ describe("Client config builder", () => {
   });
 
   it("should sanitize incoming URIs for envs", () => {
-    const shortUri = "ens/some1.wrapper.eth";
-    const longUri = "wrap://ens/some2.wrapper.eth";
+    const shortUri = "authority/some1.wrapper";
+    const longUri = "wrap://authority/some2.wrapper";
 
     const builderConfig1 = new PolywrapClientConfigBuilder()
       .addEnv(shortUri, { foo: "bar" })
@@ -637,8 +637,8 @@ describe("Client config builder", () => {
   });
 
   it("should sanitize incoming URIs for interface implementations", () => {
-    const shortUri = "ens/some1.wrapper.eth";
-    const longUri = "wrap://ens/some2.wrapper.eth";
+    const shortUri = "authority/some1.wrapper";
+    const longUri = "wrap://authority/some2.wrapper";
 
     const builderConfig1 = new PolywrapClientConfigBuilder()
       .addInterfaceImplementation(shortUri, longUri)
@@ -659,8 +659,8 @@ describe("Client config builder", () => {
   });
 
   it("should sanitize incoming URIs for redirects", () => {
-    const shortUri = "ens/some1.wrapper.eth";
-    const longUri = "wrap://ens/some2.wrapper.eth";
+    const shortUri = "authority/some1.wrapper";
+    const longUri = "wrap://authority/some2.wrapper";
 
     const builderConfig1 = new PolywrapClientConfigBuilder()
       .setRedirect(shortUri, longUri)
@@ -681,7 +681,7 @@ describe("Client config builder", () => {
   });
 
   it("should add a package", () => {
-    const uri = "wrap://ens/some.package.eth";
+    const uri = "wrap://authority/some.package";
     const pkg: IWrapPackage = {
       createWrapper: jest.fn(),
       getManifest: jest.fn(),
@@ -696,8 +696,8 @@ describe("Client config builder", () => {
   });
 
   it("should add multiple packages", () => {
-    const uri1 = "wrap://ens/some1.package.eth";
-    const uri2 = "wrap://ens/some2.package.eth";
+    const uri1 = "wrap://authority/some1.package";
+    const uri2 = "wrap://authority/some2.package";
     const pkg: IWrapPackage = {
       createWrapper: jest.fn(),
       getManifest: jest.fn(),
@@ -715,8 +715,8 @@ describe("Client config builder", () => {
   });
 
   it("should remove a package", () => {
-    const uri1 = "wrap://ens/some1.package.eth";
-    const uri2 = "wrap://ens/some2.package.eth";
+    const uri1 = "wrap://authority/some1.package";
+    const uri2 = "wrap://authority/some2.package";
     const pkg: IWrapPackage = {
       createWrapper: jest.fn(),
       getManifest: jest.fn(),
@@ -735,8 +735,8 @@ describe("Client config builder", () => {
   });
 
   it("should sanitize incoming URIs for packages", () => {
-    const shortUri = "ens/some1.package.eth";
-    const longUri = "wrap://ens/some2.package.eth";
+    const shortUri = "authority/some1.package";
+    const longUri = "wrap://authority/some2.package";
     const pkg: IWrapPackage = {
       createWrapper: jest.fn(),
       getManifest: jest.fn(),
@@ -762,7 +762,7 @@ describe("Client config builder", () => {
   });
 
   it("should add a wrapper", () => {
-    const uri = "wrap://ens/some.wrapper.eth";
+    const uri = "wrap://authority/some.wrapper";
     const wrapper: Wrapper = {
       getFile: jest.fn(),
       getManifest: jest.fn(),
@@ -780,8 +780,8 @@ describe("Client config builder", () => {
   });
 
   it("should add multiple wrappers", () => {
-    const uri1 = "wrap://ens/some1.wrapper.eth";
-    const uri2 = "wrap://ens/some2.wrapper.eth";
+    const uri1 = "wrap://authority/some1.wrapper";
+    const uri2 = "wrap://authority/some2.wrapper";
 
     const wrapper: Wrapper = {
       getFile: jest.fn(),
@@ -801,8 +801,8 @@ describe("Client config builder", () => {
   });
 
   it("should remove a wrapper", () => {
-    const uri1 = "wrap://ens/some1.wrapper.eth";
-    const uri2 = "wrap://ens/some2.wrapper.eth";
+    const uri1 = "wrap://authority/some1.wrapper";
+    const uri2 = "wrap://authority/some2.wrapper";
 
     const wrapper: Wrapper = {
       getFile: jest.fn(),
@@ -823,8 +823,8 @@ describe("Client config builder", () => {
   });
 
   it("should sanitize incoming URIs for wrappers", () => {
-    const shortUri = "ens/some1.wrapper.eth";
-    const longUri = "wrap://ens/some2.wrapper.eth";
+    const shortUri = "authority/some1.wrapper";
+    const longUri = "wrap://authority/some2.wrapper";
     const wrapper: Wrapper = {
       getFile: jest.fn(),
       getManifest: jest.fn(),

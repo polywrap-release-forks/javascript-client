@@ -68,7 +68,7 @@ export class ExtendableUriResolver extends UriResolverAggregatorBase<
 ```ts
   /** The supported interface URIs to which resolver-ext implementations should be registered */
   public static defaultExtInterfaceUris: Uri[] = [
-    Uri.from("wrap://wrapscan/polywrap/uri-resolver@1.0"),
+    Uri.from("wrapscan.io/polywrap/uri-resolver@1.0"),
   ];
 ```
 
