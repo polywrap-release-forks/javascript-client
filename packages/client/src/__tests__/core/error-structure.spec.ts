@@ -88,11 +88,11 @@ describe("Error structure", () => {
       expect(result.error?.innerError instanceof WrapError).toBeTruthy();
       const prev = result.error?.innerError as WrapError;
       expect(prev.name).toEqual("WrapError");
-      expect(prev.code).toEqual(WrapErrorCode.WRAPPER_INVOKE_ABORTED);
+      expect(prev.code).toEqual(WrapErrorCode.URI_NOT_FOUND);
       expect(prev.reason).toContain(
-        "A URI Resolver returned an error."
+        "Unable to find URI wrap://authority/imported-invoke"
       );
-      expect(prev.uri).toEqual("wrap://ens/wraps.eth:ens-uri-resolver-ext@1.0.1");
+      expect(prev.uri).toEqual("wrap://authority/imported-invoke");
     });
 
     describe("Wasm wrapper - Assemblyscript", () => {
@@ -165,8 +165,8 @@ describe("Error structure", () => {
         const config = new PolywrapClientConfigBuilder()
           .addDefaults()
           .setRedirects({
-            "ens/imported-invoke.eth": asInvokeWrapperUri.uri,
-            "ens/imported-subinvoke.eth": asSubinvokeWrapperUri.uri,
+            "authority/imported-invoke": asInvokeWrapperUri.uri,
+            "authority/imported-subinvoke": asSubinvokeWrapperUri.uri,
           })
           .build();
         const client = new PolywrapClient(config);
@@ -206,7 +206,7 @@ describe("Error structure", () => {
         expect(
           prev.reason.startsWith("SubInvocation exception encountered")
         ).toBeTruthy();
-        expect(prev.uri).toEqual("wrap://ens/imported-invoke.eth");
+        expect(prev.uri).toEqual("wrap://authority/imported-invoke");
         expect(prev.method).toEqual("invokeThrowError");
         expect(prev.args).toEqual('{\n  "a": "Hey"\n}' );
         expect(prev.source?.file).toEqual(
@@ -219,7 +219,7 @@ describe("Error structure", () => {
         expect(prevOfPrev.code).toEqual(WrapErrorCode.WRAPPER_INVOKE_ABORTED);
         expect(prevOfPrev.reason).toEqual("__wrap_abort: Hey");
         expect(
-          prevOfPrev.uri.endsWith("wrap://ens/imported-subinvoke.eth")
+          prevOfPrev.uri.endsWith("wrap://authority/imported-subinvoke")
         ).toBeTruthy();
         expect(prevOfPrev.method).toEqual("subinvokeThrowError");
         expect(prev.args).toEqual('{\n  "a": "Hey"\n}');
@@ -341,8 +341,8 @@ describe("Error structure", () => {
         const config = new PolywrapClientConfigBuilder()
           .addDefaults()
           .setRedirects({
-            "ens/imported-invoke.eth": rsInvokeWrapperUri.uri,
-            "ens/imported-subinvoke.eth": rsSubinvokeWrapperUri.uri,
+            "authority/imported-invoke": rsInvokeWrapperUri.uri,
+            "authority/imported-subinvoke": rsSubinvokeWrapperUri.uri,
           })
           .build();
 
@@ -381,7 +381,7 @@ describe("Error structure", () => {
         expect(
           prev.reason.startsWith("SubInvocation exception encountered")
         ).toBeTruthy();
-        expect(prev.uri).toEqual("wrap://ens/imported-invoke.eth");
+        expect(prev.uri).toEqual("wrap://authority/imported-invoke");
         expect(prev.method).toEqual("invokeThrowError");
         expect(prev.args).toEqual('{\n  "a": "Hey"\n}');
         expect(prev.source?.file).toEqual("src/lib.rs");
@@ -392,7 +392,7 @@ describe("Error structure", () => {
         expect(prevOfPrev.code).toEqual(WrapErrorCode.WRAPPER_INVOKE_ABORTED);
         expect(prevOfPrev.reason).toEqual("__wrap_abort: Hey");
         expect(
-          prevOfPrev.uri.endsWith("wrap://ens/imported-subinvoke.eth")
+          prevOfPrev.uri.endsWith("wrap://authority/imported-subinvoke")
         ).toBeTruthy();
         expect(prevOfPrev.method).toEqual("subinvokeThrowError");
         expect(prevOfPrev.args).toEqual('{\n  "a": "Hey"\n}');

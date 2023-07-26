@@ -17,8 +17,7 @@
   },
   "dependencies": {
     "@polywrap/config-bundle-types-js": "0.12.0-pre.1",
-    "@polywrap/ethereum-provider-js": "npm:@polywrap/ethereum-provider-js@~0.3.1",
-    "@polywrap/ethereum-provider-js-v1": "npm:@polywrap/ethereum-provider-js@~0.2.4",
+    "@polywrap/ethereum-wallet-js": "~0.1.0",
     "@polywrap/sys-config-bundle-js": "0.12.0-pre.1",
     "@polywrap/uri-resolver-extensions-js": "0.12.0-pre.1",
     "@polywrap/wasm-js": "0.12.0-pre.1",

@@ -1,3 +1,20 @@
-#import * from "wrap://ens/wraps.eth:uri-resolver-ext@1.1.0"
-
 type Env {}
+
+# NOTE: below is a hack, replace import from the following URI once CLI & Client are out of -pre release
+# "wrapscan.io/polywrap/uri-resolver@1.0"
+
+type Module {
+  tryResolveUri(
+    authority: String!
+    path: String!
+  ): MaybeUriOrManifest @env(required: false)
+
+  getFile(
+    path: String!
+  ): Bytes @env(required: false)
+}
+
+type MaybeUriOrManifest {
+  uri: String
+  manifest: Bytes
+}

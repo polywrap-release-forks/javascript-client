@@ -23,8 +23,8 @@ export async function invoke(): Promise<any> {
   const client = new PolywrapClient();
   // $start: quickstart-invoke
   const result = await client.invoke({
-    uri: "ens/helloworld.dev.polywrap.eth",
-    method: "logMessage",
+    uri: "wrapscan.io/polywrap/logging@1",
+    method: "info",
     args: {
       message: "Hello World!"
     }

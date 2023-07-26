@@ -80,12 +80,8 @@ jobs:
       - name: Build docs
         run: yarn build:docs
 
-  CI-WRAP-Test-Harness:
-    uses: ./.github/workflows/ci-wrap-test-harness.yaml
-
   Test:
     runs-on: ubuntu-latest
-    needs: CI-WRAP-Test-Harness
     timeout-minutes: 60
     if: ${{ always() }}
     steps:
@@ -117,19 +113,6 @@ jobs:
 
       - name: Build
         run: yarn build
-
-      - name: Get updated wrappers
-        if: ${{ needs.CI-WRAP-Test-Harness.outputs.rebuild_required == 'true' }}
-        uses: actions/download-artifact@v3
-        id: get-wrappers
-        with:
-          name: rebuilt-wrappers
-          path: ./wrappers
-
-      - if: ${{ needs.CI-WRAP-Test-Harness.outputs.rebuild_required == 'true' }}
-        run: |
-          rm -rf packages/test-cases/wrappers
-          mv wrappers packages/test-cases
 
       - name: Test
         run: yarn test

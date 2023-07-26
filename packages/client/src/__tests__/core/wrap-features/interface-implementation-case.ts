@@ -4,7 +4,7 @@ import {
   PolywrapClient,
   UriMap,
 } from "../../../index";
-import { PolywrapClientConfigBuilder } from "@polywrap/client-config-builder-js";
+import { PolywrapClientConfigBuilder, Sys } from "@polywrap/client-config-builder-js";
 import { UriResolver } from "@polywrap/uri-resolvers-js";
 import { mockPluginRegistration } from "../../helpers";
 import { GetPathToTestWrappers } from "@polywrap/test-cases";
@@ -15,7 +15,7 @@ jest.setTimeout(200000);
 export const interfaceInvokeCase = (implementation: string) => {
   describe("interface invoke", () => {
     test(`invoke wrappers ${implementation}`, async () => {
-      const interfaceUri = "wrap://ens/interface.eth";
+      const interfaceUri = "wrap://authority/interface";
       const implementationPath = `${GetPathToTestWrappers()}/interface-invoke/01-implementation/implementations/${implementation}`;
       const implementationUri = `fs/${implementationPath}`;
 
@@ -48,12 +48,12 @@ export const interfaceInvokeCase = (implementation: string) => {
 
   describe("interface-implementations", () => {
     it("should register interface implementations successfully", async () => {
-      const interfaceUri = Uri.from("wrap://ens/some-interface1.eth");
+      const interfaceUri = Uri.from("wrap://authority/some-interface1");
       const implementation1Uri = Uri.from(
-        "wrap://ens/some-implementation1.eth"
+        "wrap://authority/some-implementation1"
       );
       const implementation2Uri = Uri.from(
-        "wrap://ens/some-implementation2.eth"
+        "wrap://authority/some-implementation2"
       );
 
       const client = new PolywrapClient({
@@ -83,19 +83,19 @@ export const interfaceInvokeCase = (implementation: string) => {
     });
 
     it("should get all implementations of interface", async () => {
-      const interface1Uri = Uri.from("wrap://ens/some-interface1.eth");
-      const interface2Uri = Uri.from("wrap://ens/some-interface2.eth");
-      const interface3Uri = Uri.from("wrap://ens/some-interface3.eth");
+      const interface1Uri = Uri.from("wrap://authority/some-interface1");
+      const interface2Uri = Uri.from("wrap://authority/some-interface2");
+      const interface3Uri = Uri.from("wrap://authority/some-interface3");
 
-      const implementation1Uri = Uri.from("wrap://ens/some-implementation.eth");
+      const implementation1Uri = Uri.from("wrap://authority/some-implementation");
       const implementation2Uri = Uri.from(
-        "wrap://ens/some-implementation2.eth"
+        "wrap://authority/some-implementation2"
       );
       const implementation3Uri = Uri.from(
-        "wrap://ens/some-implementation3.eth"
+        "wrap://authority/some-implementation3"
       );
       const implementation4Uri = Uri.from(
-        "wrap://ens/some-implementation4.eth"
+        "wrap://authority/some-implementation4"
       );
 
       const client = new PolywrapClient({
@@ -150,9 +150,9 @@ export const interfaceInvokeCase = (implementation: string) => {
     });
 
     it("should merge user-defined interface implementations with each other", async () => {
-      const interfaceUri = Uri.from("wrap://ens/interface.eth");
-      const implementationUri1 = Uri.from("wrap://ens/implementation1.eth");
-      const implementationUri2 = Uri.from("wrap://ens/implementation2.eth");
+      const interfaceUri = Uri.from("wrap://authority/interface");
+      const implementationUri1 = Uri.from("wrap://authority/implementation1");
+      const implementationUri2 = Uri.from("wrap://authority/implementation2");
 
       const config = new PolywrapClientConfigBuilder()
         .addDefaults()
@@ -173,8 +173,8 @@ export const interfaceInvokeCase = (implementation: string) => {
 
     it("should merge user-defined interface implementations with defaults", async () => {
       const interfaceUri = ExtendableUriResolver.defaultExtInterfaceUris[0];
-      const implementationUri1 = Uri.from("wrap://ens/implementation1.eth");
-      const implementationUri2 = Uri.from("wrap://ens/implementation2.eth");
+      const implementationUri1 = Uri.from("wrap://authority/implementation1");
+      const implementationUri2 = Uri.from("wrap://authority/implementation2");
 
       const config = new PolywrapClientConfigBuilder()
         .addDefaults()
@@ -197,13 +197,13 @@ export const interfaceInvokeCase = (implementation: string) => {
     });
 
     test("get implementations - do not return plugins that are not explicitly registered", async () => {
-      const interfaceUri = Uri.from("wrap://ens/some-interface.eth");
+      const interfaceUri = Uri.from("wrap://authority/some-interface");
 
       const implementation1Uri = Uri.from(
-        "wrap://ens/some-implementation1.eth"
+        "wrap://authority/some-implementation1"
       );
       const implementation2Uri = Uri.from(
-        "wrap://ens/some-implementation2.eth"
+        "wrap://authority/some-implementation2"
       );
 
       const client = new PolywrapClient({
@@ -224,13 +224,13 @@ export const interfaceInvokeCase = (implementation: string) => {
     });
 
     test("get implementations - return implementations for plugins which don't have interface stated in manifest", async () => {
-      const interfaceUri = Uri.from("wrap://ens/some-interface.eth");
+      const interfaceUri = Uri.from("wrap://authority/some-interface");
 
       const implementation1Uri = Uri.from(
-        "wrap://ens/some-implementation1.eth"
+        "wrap://authority/some-implementation1"
       );
       const implementation2Uri = Uri.from(
-        "wrap://ens/some-implementation2.eth"
+        "wrap://authority/some-implementation2"
       );
 
       const client = new PolywrapClient({
@@ -269,6 +269,7 @@ export const interfaceInvokeCase = (implementation: string) => {
         .setRedirect(oldInterfaceUri.uri, newInterfaceUri.uri)
         .addInterfaceImplementation(oldInterfaceUri.uri, implementation1Uri.uri)
         .addInterfaceImplementation(newInterfaceUri.uri, implementation2Uri.uri)
+        .setPackage(newInterfaceUri.uri, Sys.bundle.httpResolver.package!)
         .build();
 
       const client = new PolywrapClient(config);

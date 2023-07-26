@@ -31,13 +31,13 @@ const getClient = (redirects: IUriRedirect[]): CoreClient => {
 
 describe("getImplementations", () => {
   it("works with complex redirects", async () => {
-    const interface1Uri = "wrap://ens/some-interface1.eth";
-    const interface2Uri = "wrap://ens/some-interface2.eth";
-    const interface3Uri = "wrap://ens/some-interface3.eth";
+    const interface1Uri = "wrap://authority/some-interface1";
+    const interface2Uri = "wrap://authority/some-interface2";
+    const interface3Uri = "wrap://authority/some-interface3";
 
-    const implementation1Uri = "wrap://ens/some-implementation.eth";
-    const implementation2Uri = "wrap://ens/some-implementation2.eth";
-    const implementation3Uri = "wrap://ens/some-implementation3.eth";
+    const implementation1Uri = "wrap://authority/some-implementation";
+    const implementation2Uri = "wrap://authority/some-implementation2";
+    const implementation3Uri = "wrap://authority/some-implementation3";
 
     const redirects: IUriRedirect[] = [
       {
@@ -101,10 +101,10 @@ describe("getImplementations", () => {
   });
 
   it("interface implementations are not redirected", async () => {
-    const interface1Uri = "wrap://ens/some-interface1.eth";
+    const interface1Uri = "wrap://authority/some-interface1";
 
-    const implementation1Uri = "wrap://ens/some-implementation.eth";
-    const implementation2Uri = "wrap://ens/some-implementation2.eth";
+    const implementation1Uri = "wrap://authority/some-implementation";
+    const implementation2Uri = "wrap://authority/some-implementation2";
 
     const redirects: IUriRedirect[] = [
       {

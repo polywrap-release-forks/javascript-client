@@ -24,9 +24,9 @@ describe("sanity", () => {
   });
 
   test("validate requested uri is available", async () => {
-    const subinvokeUri = Uri.from("ens/imported-subinvoke.eth");
-    const invokeUri = Uri.from("ens/imported-invoke.eth");
-    const consumerUri = Uri.from("ens/consumer.eth");
+    const subinvokeUri = Uri.from("authority/imported-subinvoke");
+    const invokeUri = Uri.from("authority/imported-invoke");
+    const consumerUri = Uri.from("authority/consumer");
 
     const getPackage = async (name: string) => {
       const manifest = await fs.promises.readFile(

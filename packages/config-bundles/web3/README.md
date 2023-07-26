@@ -6,72 +6,57 @@ A collection of Web3 configurations.
 
 ```typescript
 import * as Sys from "@polywrap/sys-config-bundle-js";
-import * as EthProviderV1 from "@polywrap/ethereum-provider-js-v1";
-import * as EthProvider from "@polywrap/ethereum-provider-js";
+import * as EthWallet from "@polywrap/ethereum-wallet-js";
 
-export const bundle: Bundle = {
+export interface Web3Bundle extends Bundle {
+  concurrent: BundlePackage;
+  http: BundlePackage;
+  ipfsHttpClient: BundlePackage;
+  ipfsResolver: BundlePackage;
+  ethereumWallet: BundlePackage;
+  ensTextRecordResolver: BundlePackage;
+  ensContenthashResolver: BundlePackage;
+  ensIpfsContenthashResolver: BundlePackage;
+}
+
+export const bundle: Web3Bundle = {
   concurrent: Sys.bundle.concurrent,
   http: Sys.bundle.http,
   ipfsHttpClient: Sys.bundle.ipfsHttpClient,
   ipfsResolver: Sys.bundle.ipfsResolver,
-  ethereumProviderV1: {
-    uri: "plugin/ethereum-provider@1.1.0",
-    package: EthProviderV1.plugin({
-      connections: new EthProviderV1.Connections({
+  ethereumWallet: {
+    uri: "plugin/ethereum-wallet@1.0",
+    package: EthWallet.plugin({
+      connections: new EthWallet.Connections({
         networks: {
-          mainnet: new EthProviderV1.Connection({
+          mainnet: new EthWallet.Connection({
             provider:
               "https://mainnet.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
           }),
-          goerli: new EthProviderV1.Connection({
+          goerli: new EthWallet.Connection({
             provider:
               "https://goerli.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
           }),
         },
       }),
     }) as IWrapPackage,
-    implements: [
-      "ens/wraps.eth:ethereum-provider@1.1.0",
-      "ens/wraps.eth:ethereum-provider@1.0.0",
-    ],
-    redirectFrom: [
-      "ens/wraps.eth:ethereum-provider@1.1.0",
-      "ens/wraps.eth:ethereum-provider@1.0.0",
-    ],
-  },
-  ethereumProviderV2: {
-    uri: "plugin/ethereum-provider@2.0.0",
-    package: EthProvider.plugin({
-      connections: new EthProvider.Connections({
-        networks: {
-          mainnet: new EthProvider.Connection({
-            provider:
-              "https://mainnet.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
-          }),
-          goerli: new EthProvider.Connection({
-            provider:
-              "https://goerli.infura.io/v3/b00b2c2cc09c487685e9fb061256d6a6",
-          }),
-        },
-      }),
-    }) as IWrapPackage,
-    implements: ["ens/wraps.eth:ethereum-provider@2.0.0"],
-    redirectFrom: ["ens/wraps.eth:ethereum-provider@2.0.0"],
+    implements: ["wrapscan.io/polywrap/ethereum-wallet@1.0"],
+    redirectFrom: ["wrapscan.io/polywrap/ethereum-wallet@1.0"],
   },
   ensTextRecordResolver: {
-    uri: "ipfs/QmXcHWtKkfrFmcczdMSXH7udsSyV3UJeoWzkaUqGBm1oYs",
+    uri: "ipfs/QmdYoDrXPxgjSoWuSWirWYxU5BLtpGVKd3z2GXKhW2VXLh",
     implements: [
-      "ens/wraps.eth:ens-text-record-uri-resolver-ext@1.0.1",
+      "wrapscan.io/polywrap/ens-text-record-uri-resolver@1.0",
       ExtendableUriResolver.defaultExtInterfaceUris[0].uri,
     ],
-    redirectFrom: ["ens/wraps.eth:ens-text-record-uri-resolver-ext@1.0.1"],
+    redirectFrom: ["wrapscan.io/polywrap/ens-text-record-uri-resolver@1.0"],
   },
-  ensResolver: {
-    uri: "ens/wraps.eth:ens-uri-resolver-ext@1.0.1",
+  ensContenthashResolver: {
+    uri: "wrapscan.io/polywrap/ens-contenthash-uri-resolver@1.0",
     implements: [ExtendableUriResolver.defaultExtInterfaceUris[0].uri],
   },
   ensIpfsContenthashResolver: {
-    uri: "ens/wraps.eth:ens-ipfs-contenthash-uri-resolver-ext@1.0.1",
+    uri: "wrapscan.io/polywrap/ens-ipfs-contenthash-uri-resolver@1.0",
     implements: [ExtendableUriResolver.defaultExtInterfaceUris[0].uri],
   },
 };

@@ -46,7 +46,12 @@ describe("Uri", () => {
   });
 
   it("Infers common URI authorities", () => {
-    let uri = new Uri("https://domain.com/path/to/thing");
+    let uri = new Uri("wrapscan.io/polywrap/package@1.2");
+    expect(uri.uri).toEqual("wrap://wrapscan.io/polywrap/package@1.2");
+    expect(uri.authority).toEqual("wrapscan.io");
+    expect(uri.path).toEqual("polywrap/package@1.2");
+
+    uri = new Uri("https://domain.com/path/to/thing");
     expect(uri.uri).toEqual("wrap://https/domain.com/path/to/thing");
     expect(uri.authority).toEqual("https");
     expect(uri.path).toEqual("domain.com/path/to/thing");
