@@ -1,13 +1,24 @@
 /* eslint-disable */
 import { IWrapPackage } from "@polywrap/core-js";
-import { Bundle } from "@polywrap/config-bundle-types-js";
+import { Bundle, BundlePackage } from "@polywrap/config-bundle-types-js";
 import { ExtendableUriResolver } from "@polywrap/uri-resolver-extensions-js";
 
 // $start: bundle
 import * as Sys from "@polywrap/sys-config-bundle-js";
 import * as EthWallet from "@polywrap/ethereum-wallet-js";
 
-export const bundle: Bundle = {
+export interface Web3Bundle extends Bundle {
+  concurrent: BundlePackage;
+  http: BundlePackage;
+  ipfsHttpClient: BundlePackage;
+  ipfsResolver: BundlePackage;
+  ethereumWallet: BundlePackage;
+  ensTextRecordResolver: BundlePackage;
+  ensContenthashResolver: BundlePackage;
+  ensIpfsContenthashResolver: BundlePackage;
+}
+
+export const bundle: Web3Bundle = {
   concurrent: Sys.bundle.concurrent,
   http: Sys.bundle.http,
   ipfsHttpClient: Sys.bundle.ipfsHttpClient,
@@ -39,8 +50,8 @@ export const bundle: Bundle = {
     ],
     redirectFrom: ["wrapscan.io/polywrap/ens-text-record-uri-resolver@1.0"],
   },
-  ensResolver: {
-    uri: "wrapscan.io/polywrap/ens-uri-resolver@1.0",
+  ensContenthashResolver: {
+    uri: "wrapscan.io/polywrap/ens-contenthash-uri-resolver@1.0",
     implements: [ExtendableUriResolver.defaultExtInterfaceUris[0].uri],
   },
   ensIpfsContenthashResolver: {

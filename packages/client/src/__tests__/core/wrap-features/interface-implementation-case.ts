@@ -4,7 +4,7 @@ import {
   PolywrapClient,
   UriMap,
 } from "../../../index";
-import { PolywrapClientConfigBuilder } from "@polywrap/client-config-builder-js";
+import { PolywrapClientConfigBuilder, Sys } from "@polywrap/client-config-builder-js";
 import { UriResolver } from "@polywrap/uri-resolvers-js";
 import { mockPluginRegistration } from "../../helpers";
 import { GetPathToTestWrappers } from "@polywrap/test-cases";
@@ -269,6 +269,7 @@ export const interfaceInvokeCase = (implementation: string) => {
         .setRedirect(oldInterfaceUri.uri, newInterfaceUri.uri)
         .addInterfaceImplementation(oldInterfaceUri.uri, implementation1Uri.uri)
         .addInterfaceImplementation(newInterfaceUri.uri, implementation2Uri.uri)
+        .setPackage(newInterfaceUri.uri, Sys.bundle.httpResolver.package!)
         .build();
 
       const client = new PolywrapClient(config);

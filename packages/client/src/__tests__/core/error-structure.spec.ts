@@ -92,7 +92,7 @@ describe("Error structure", () => {
       expect(prev.reason).toContain(
         "A URI Resolver returned an error."
       );
-      expect(prev.uri).toEqual("wrapscan.io/polywrap/ens-uri-resolver@1.0.0");
+      expect(prev.uri).toEqual("wrap://embed/http-uri-resolver@1.0.0");
     });
 
     describe("Wasm wrapper - Assemblyscript", () => {

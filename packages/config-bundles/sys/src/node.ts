@@ -2,14 +2,19 @@
 import * as Common from "./common";
 
 import { IWrapPackage } from "@polywrap/core-js";
-import { Bundle } from "@polywrap/config-bundle-types-js";
+import { BundlePackage } from "@polywrap/config-bundle-types-js";
 import { ExtendableUriResolver } from "@polywrap/uri-resolver-extensions-js";
 
 // $start: bundle-node
 import { fileSystemPlugin } from "@polywrap/file-system-plugin-js";
 import * as fileSystemResolver from "./embeds/file-system-resolver/wrap";
 
-export const bundle: Bundle = {
+interface SysNodeBundle extends Common.SysCommonBundle {
+  fileSystem: BundlePackage;
+  fileSystemResolver: BundlePackage;
+}
+
+export const bundle: SysNodeBundle = {
   ...Common.bundle,
   fileSystem: {
     uri: "plugin/file-system@1.0",

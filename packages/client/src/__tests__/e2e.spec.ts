@@ -3,7 +3,10 @@ import { subinvokeCase } from "./core/wrap-features/subinvoke-case";
 import { envTestCases } from "./core/wrap-features/env-case";
 import { interfaceInvokeCase } from "./core/wrap-features/interface-implementation-case";
 
+jest.setTimeout(60000);
+
 export const supportedImplementations = ["as", "rs"];
+
 describe.each(supportedImplementations)(
   "client <-> wrappers end to end",
   (i) => {

@@ -37,7 +37,7 @@ describe("URI resolution", () => {
     const result = await client.tryResolveUri({ uri, resolutionContext });
 
     const expectResult = UriResolutionResult.ok(
-      Uri.from("wrap://ipfs/QmSAXrSLcmGUkQRrApAtG5qTPmuRMMX2Zf1wihpguDQfbm")
+      Uri.from("wrap://ipfs/QmeHyySwhkYvKqaPNtcq7wYDb1M9QnaqbaX1eDNDqW5fdt")
     );
 
     if (expectResult.ok) {

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { IWrapPackage } from "@polywrap/core-js";
-import { Bundle } from "@polywrap/config-bundle-types-js";
+import { Bundle, BundlePackage } from "@polywrap/config-bundle-types-js";
 import { ExtendableUriResolver } from "@polywrap/uri-resolver-extensions-js";
 
 // $start: bundle
@@ -17,7 +17,19 @@ export const ipfsProviders: string[] = [
   "https://ipfs.io",
 ];
 
-export const bundle: Bundle = {
+export interface SysCommonBundle extends Bundle {
+  logger: BundlePackage;
+  datetime: BundlePackage;
+  concurrent: BundlePackage;
+  http: BundlePackage;
+  githubResolver: BundlePackage;
+  httpResolver: BundlePackage;
+  wrapscanResolver: BundlePackage;
+  ipfsHttpClient: BundlePackage;
+  ipfsResolver: BundlePackage;
+}
+
+export const bundle: SysCommonBundle = {
   logger: {
     uri: "plugin/logger@1.0.0",
     package: loggerPlugin({}) as IWrapPackage,
