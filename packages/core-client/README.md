@@ -31,8 +31,8 @@ Invoke a wrapper.
 
 ```ts
   const result = await client.invoke({
-    uri: Uri.from("ens/helloworld.dev.polywrap.eth"),
-    method: "logMessage",
+    uri: Uri.from("wrapscan.io/polywrap/logging@1.0"),
+    method: "info",
     args: {
       message: "Hello World!",
     },

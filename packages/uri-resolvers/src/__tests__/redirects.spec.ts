@@ -5,8 +5,8 @@ import { StaticResolver } from "../static";
 
 describe("redirects", () => {
   it("sanity - UriResolver", async () => {
-    const uri1 = Uri.from("wrap://ens/some-uri1.eth");
-    const uri2 = Uri.from("wrap://ens/some-uri2.eth");
+    const uri1 = Uri.from("wrap://authority/some-uri1");
+    const uri2 = Uri.from("wrap://authority/some-uri2");
     const resolver = UriResolver.from([{ from: uri1, to: uri2 }]);
 
     const redirectsResult = await resolver.tryResolveUri(
@@ -26,8 +26,8 @@ describe("redirects", () => {
   });
 
   it("sanity - StaticResolver", async () => {
-    const uri1 = Uri.from("wrap://ens/some-uri1.eth");
-    const uri2 = Uri.from("wrap://ens/some-uri2.eth");
+    const uri1 = Uri.from("wrap://authority/some-uri1");
+    const uri2 = Uri.from("wrap://authority/some-uri2");
     const resolver = StaticResolver.from([{ from: uri1, to: uri2 }]);
 
     const redirectsResult = await resolver.tryResolveUri(
@@ -47,9 +47,9 @@ describe("redirects", () => {
   });
 
   it("works with the redirect stack overrides - RecursiveResolver", async () => {
-    const uri1 = Uri.from("wrap://ens/some-uri1.eth");
-    const uri2 = Uri.from("wrap://ens/some-uri2.eth");
-    const uri3 = Uri.from("wrap://ens/some-uri3.eth");
+    const uri1 = Uri.from("wrap://authority/some-uri1");
+    const uri2 = Uri.from("wrap://authority/some-uri2");
+    const uri3 = Uri.from("wrap://authority/some-uri3");
 
     const resolver = RecursiveResolver.from([
       {
@@ -79,9 +79,9 @@ describe("redirects", () => {
   });
 
   it("works with the redirect stack overrides - RecursiveResolver with StaticResolver", async () => {
-    const uri1 = Uri.from("wrap://ens/some-uri1.eth");
-    const uri2 = Uri.from("wrap://ens/some-uri2.eth");
-    const uri3 = Uri.from("wrap://ens/some-uri3.eth");
+    const uri1 = Uri.from("wrap://authority/some-uri1");
+    const uri2 = Uri.from("wrap://authority/some-uri2");
+    const uri3 = Uri.from("wrap://authority/some-uri3");
 
     const resolver = RecursiveResolver.from(
       StaticResolver.from([
@@ -113,8 +113,8 @@ describe("redirects", () => {
   });
 
   it("can not redirect to self - RecursiveResolver", async () => {
-    const uri1 = Uri.from("wrap://ens/some-uri1.eth");
-    const uri2 = Uri.from("wrap://ens/some-uri2.eth");
+    const uri1 = Uri.from("wrap://authority/some-uri1");
+    const uri2 = Uri.from("wrap://authority/some-uri2");
 
     const resolver = RecursiveResolver.from([
       {
@@ -142,8 +142,8 @@ describe("redirects", () => {
   });
 
   it("can not redirect to self - RecursiveResolver with StaticResolver", async () => {
-    const uri1 = Uri.from("wrap://ens/some-uri1.eth");
-    const uri2 = Uri.from("wrap://ens/some-uri2.eth");
+    const uri1 = Uri.from("wrap://authority/some-uri1");
+    const uri2 = Uri.from("wrap://authority/some-uri2");
 
     const resolver = RecursiveResolver.from(
       StaticResolver.from([
