@@ -89,15 +89,15 @@ A complete example using all or most of the available methods.
   // add and remove wrappers
   builder
     .setWrapper(
-      "wrap://ens/wrapper.eth",
+      "wrap://authority/wrapper",
       await WasmWrapper.from(
         new Uint8Array([1, 2, 3]),
         new Uint8Array([1, 2, 3])
       )
     )
-    .removeWrapper("wrap://ens/wrapper.eth")
+    .removeWrapper("wrap://authority/wrapper")
     .setWrappers({
-      "wrap://ens/wrapper.eth": await WasmWrapper.from(
+      "wrap://authority/wrapper": await WasmWrapper.from(
         new Uint8Array([1, 2, 3]),
         new Uint8Array([1, 2, 3])
       ),
@@ -113,35 +113,35 @@ A complete example using all or most of the available methods.
 
   // add and remove Envs
   builder
-    .addEnv("wrap://ens/wrapper.eth", { key: "value" })
-    .removeEnv("wrap://ens/wrapper.eth")
+    .addEnv("wrap://authority/wrapper", { key: "value" })
+    .removeEnv("wrap://authority/wrapper")
     .addEnvs({
-      "wrap://ens/wrapper.eth": { key: "value" },
+      "wrap://authority/wrapper": { key: "value" },
     });
 
   // override existing Env, or add new Env if one is not registered at URI
-  builder.setEnv("wrap://ens/wrapper.eth", { key: "value" });
+  builder.setEnv("wrap://authority/wrapper", { key: "value" });
 
   // add or remove registration for an implementation of an interface
   builder
     .addInterfaceImplementation(
-      "wrap://ens/interface.eth",
-      "wrap://ens/wrapper.eth"
+      "wrap://authority/interface",
+      "wrap://authority/wrapper"
     )
     .removeInterfaceImplementation(
-      "wrap://ens/interface.eth",
-      "wrap://ens/wrapper.eth"
+      "wrap://authority/interface",
+      "wrap://authority/wrapper"
     )
-    .addInterfaceImplementations("wrap://ens/interface.eth", [
-      "wrap://ens/wrapper.eth",
+    .addInterfaceImplementations("wrap://authority/interface", [
+      "wrap://authority/wrapper",
     ]);
 
   // add or remove URI redirects
   builder
-    .setRedirect("wrap://ens/from.eth", "wrap://ens/to.eth")
-    .removeRedirect("wrap://ens/from.eth")
+    .setRedirect("wrap://authority/from", "wrap://authority/to")
+    .removeRedirect("wrap://authority/from")
     .setRedirects({
-      "wrap://ens/from.eth": "wrap://ens/to.eth",
+      "wrap://authority/from": "wrap://authority/to",
     });
 
   // add resolvers

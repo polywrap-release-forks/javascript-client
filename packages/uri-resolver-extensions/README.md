@@ -24,11 +24,12 @@ Otherwise, you must also add the `ExtendableUriResolver` to your resolver.
   const clientConfig: CoreClientConfig = {
     interfaces: new UriMap<Uri[]>([
       [
-        Uri.from("wrap://ens/uri-resolver.core.polywrap.eth"),
+        Uri.from("wrapscan.io/polywrap/uri-resolver@1.0"),
         [
-          Uri.from("wrap://ens/fs-resolver.polywrap.eth"),
-          Uri.from("wrap://ens/ipfs-resolver.polywrap.eth"),
-          Uri.from("wrap://ens/ens-resolver.polywrap.eth"),
+          Uri.from("wrapscan.io/polywrap/file-system-uri-resolver@1.0.0"),
+          Uri.from("wrapscan.io/polywrap/http-uri-resolver@1.0.0"),
+          Uri.from("wrapscan.io/polywrap/ipfs-uri-resolver-async@1.0.0"),
+          Uri.from("wrapscan.io/polywrap/wrapscan-uri-resolver@1.0.0"),
         ],
       ],
     ]),
@@ -67,8 +68,7 @@ export class ExtendableUriResolver extends UriResolverAggregatorBase<
 ```ts
   /** The supported interface URIs to which resolver-ext implementations should be registered */
   public static defaultExtInterfaceUris: Uri[] = [
-    Uri.from("wrap://ens/wraps.eth:uri-resolver-ext@1.1.0"),
-    Uri.from("wrap://ens/wraps.eth:uri-resolver-ext@1.0.0"),
+    Uri.from("wrapscan.io/polywrap/uri-resolver@1.0"),
   ];
 ```
 

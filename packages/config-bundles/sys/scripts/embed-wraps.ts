@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { WasmPackage } from "@polywrap/wasm-js";
+import { deserializeWrapManifest } from "@polywrap/wrap-manifest-types-js";
 
 async function main() {
 
@@ -25,12 +25,7 @@ async function main() {
 
     try {
       // Make sure we can load the wasm module
-      const tryLoad = WasmPackage.from(
-        infoBytes,
-        wasmBytes
-      );
-      const result = await tryLoad.getManifest();
-      if (!result.ok) throw result.error;
+      await deserializeWrapManifest(infoBytes);
     } catch (err) {
       throw Error(`Unable to load wrapper at ${wrapperDir}`);
     }

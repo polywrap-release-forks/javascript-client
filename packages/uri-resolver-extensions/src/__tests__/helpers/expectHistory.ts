@@ -7,16 +7,19 @@ export const expectHistory = async (
   historyFileName: string,
   replaceFilePaths?: boolean
 ): Promise<void> => {
-  if (!receivedHistory) {
-    fail("History is not defined");
-  }
+  expect(receivedHistory).toBeTruthy();
+
+  if (!receivedHistory) return;
 
   const expectedCleanHistoryStr = await fs.promises.readFile(
     `${__dirname}/../histories/${historyFileName}.json`,
     "utf-8"
   );
-  const expectedCleanHistory = JSON.stringify(JSON.parse(expectedCleanHistoryStr), null, 2);
-
+  const expectedCleanHistory = JSON.stringify(
+    JSON.parse(expectedCleanHistoryStr),
+    null,
+    2
+  );
 
   let receivedCleanHistory = replaceAll(
     JSON.stringify(buildCleanUriHistory(receivedHistory), null, 2),

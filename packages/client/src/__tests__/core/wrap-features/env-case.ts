@@ -5,6 +5,7 @@ import { mockPluginRegistration } from "../../helpers";
 import { PolywrapClientConfigBuilder } from "@polywrap/client-config-builder-js";
 import { Uri, UriMap } from "@polywrap/core-js";
 import { GetPathToTestWrappers } from "@polywrap/test-cases";
+import { ResultOk } from "@polywrap/result";
 
 jest.setTimeout(200000);
 
@@ -14,9 +15,7 @@ export const envTestCases = (implementation: string) => {
       const wrapperPath = `${GetPathToTestWrappers()}/env-type/00-main/implementations/${implementation}`;
       const wrapperUri = Uri.from(`file/${wrapperPath}`);
 
-      const config = new PolywrapClientConfigBuilder()
-        .addDefaults()
-        .build();
+      const config = new PolywrapClientConfigBuilder().addDefaults().build();
 
       const client = new PolywrapClient(config);
 
@@ -28,8 +27,7 @@ export const envTestCases = (implementation: string) => {
         },
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual("test");
+      expect(result).toEqual(ResultOk("test"));
     });
 
     test(`invoke method without env works with env in ${implementation}`, async () => {
@@ -49,7 +47,7 @@ export const envTestCases = (implementation: string) => {
       };
 
       const envs = {
-        [wrapperUri.uri]: env
+        [wrapperUri.uri]: env,
       };
 
       const config = new PolywrapClientConfigBuilder()
@@ -58,7 +56,7 @@ export const envTestCases = (implementation: string) => {
         .build();
 
       const client = new PolywrapClient(config);
-      
+
       const result = await client.invoke({
         uri: wrapperUri,
         method: "methodNoEnv",
@@ -67,8 +65,7 @@ export const envTestCases = (implementation: string) => {
         },
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual("test");
+      expect(result).toEqual(ResultOk("test"));
     });
 
     test(`invoke method with required env works with env in ${implementation}`, async () => {
@@ -105,7 +102,7 @@ export const envTestCases = (implementation: string) => {
       };
 
       const envs = {
-        [wrapperUri.uri]: env
+        [wrapperUri.uri]: env,
       };
 
       const config = new PolywrapClientConfigBuilder()
@@ -114,14 +111,13 @@ export const envTestCases = (implementation: string) => {
         .build();
 
       const client = new PolywrapClient(config);
-      
+
       const result = await client.invoke({
         uri: wrapperUri,
         method: "methodRequireEnv",
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual(expectedEnv);
+      expect(result).toEqual(ResultOk(expectedEnv));
     });
 
     test(`invoke method with required env throws without env registered in ${implementation}`, async () => {
@@ -135,9 +131,13 @@ export const envTestCases = (implementation: string) => {
         uri: wrapperUri,
         method: "methodRequireEnv",
       });
-      
-      if (result.ok) fail("Expected error");
-      expect(result.error?.message).toMatch(/Environment is not set, and it is required/g);
+
+      expect(result.ok).toBe(false);
+
+      !result.ok &&
+        expect(result.error?.message).toMatch(
+          /Environment is not set, and it is required/g
+        );
     });
 
     test(`invoke method with optional env works with env in ${implementation}`, async () => {
@@ -174,7 +174,7 @@ export const envTestCases = (implementation: string) => {
       };
 
       const envs = {
-        [wrapperUri.uri]: env
+        [wrapperUri.uri]: env,
       };
 
       const config = new PolywrapClientConfigBuilder()
@@ -183,14 +183,13 @@ export const envTestCases = (implementation: string) => {
         .build();
 
       const client = new PolywrapClient(config);
-      
+
       const result = await client.invoke({
         uri: wrapperUri,
         method: "methodOptionalEnv",
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual(expectedEnv);
+      expect(result).toEqual(ResultOk(expectedEnv));
     });
 
     test(`invoke method with optional env works without env in ${implementation}`, async () => {
@@ -205,8 +204,7 @@ export const envTestCases = (implementation: string) => {
         method: "methodOptionalEnv",
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual(null);
+      expect(result).toEqual(ResultOk(null));
     });
 
     test(`env can be registered for any uri in resolution path in ${implementation}`, async () => {
@@ -226,7 +224,7 @@ export const envTestCases = (implementation: string) => {
           en: "FIRST",
           array: [32, 23],
         };
-  
+
         const expectedEnv = {
           str: "string",
           optFilledStr: "optional string",
@@ -245,23 +243,22 @@ export const envTestCases = (implementation: string) => {
         };
 
         const envs = {
-          [envUri.uri]: env
+          [envUri.uri]: env,
         };
-        
+
         const config = new PolywrapClientConfigBuilder()
           .addDefaults()
           .addEnvs(envs)
           .setRedirect(redirectFromUri.uri, wrapperUri.uri)
           .build();
         const client = new PolywrapClient(config);
-        
+
         const result = await client.invoke({
           uri: redirectFromUri,
           method: "methodRequireEnv",
         });
-  
-        if (!result.ok) fail(result.error);
-        expect(result.value).toEqual(expectedEnv);
+
+        expect(result).toEqual(ResultOk(expectedEnv));
       };
 
       await runTestForEnvUri(redirectFromUri);
@@ -291,8 +288,7 @@ export const envTestCases = (implementation: string) => {
         },
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual("test");
+      expect(result).toEqual(ResultOk("test"));
     });
 
     test(`subinvoke method without env works with env in ${implementation}`, async () => {
@@ -300,8 +296,8 @@ export const envTestCases = (implementation: string) => {
       const subinvokedPath = `${GetPathToTestWrappers()}/env-type/00-main/implementations/${implementation}`;
       const { uri: subinvokerUri } = Uri.from(`file/${subinvokerPath}`);
       const { uri: subinvokedUri } = Uri.from(`file/${subinvokedPath}`);
-    
-      const subinvokedEnv =  {
+
+      const subinvokedEnv = {
         object: {
           prop: "object string",
         },
@@ -314,7 +310,7 @@ export const envTestCases = (implementation: string) => {
       };
 
       const envs = {
-        "mock/main": subinvokedEnv
+        "mock/main": subinvokedEnv,
       };
 
       const config = new PolywrapClientConfigBuilder()
@@ -333,8 +329,7 @@ export const envTestCases = (implementation: string) => {
         },
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual("test");
+      expect(result).toEqual(ResultOk("test"));
     });
 
     test(`subinvoke method with required env works with env in ${implementation}`, async () => {
@@ -343,7 +338,7 @@ export const envTestCases = (implementation: string) => {
       const { uri: subinvokerUri } = Uri.from(`file/${subinvokerPath}`);
       const { uri: subinvokedUri } = Uri.from(`file/${subinvokedPath}`);
 
-      const subinvokedEnv =  {
+      const subinvokedEnv = {
         object: {
           prop: "object string",
         },
@@ -373,7 +368,7 @@ export const envTestCases = (implementation: string) => {
       };
 
       const envs = {
-        "mock/main": subinvokedEnv
+        "mock/main": subinvokedEnv,
       };
 
       const config = new PolywrapClientConfigBuilder()
@@ -389,8 +384,7 @@ export const envTestCases = (implementation: string) => {
         method: "subinvokeMethodRequireEnv",
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual(expectedSubinvokedEnv);
+      expect(result).toEqual(ResultOk(expectedSubinvokedEnv));
     });
 
     test(`subinvoke method with required env throws without env registered in ${implementation}`, async () => {
@@ -410,8 +404,12 @@ export const envTestCases = (implementation: string) => {
         method: "subinvokeMethodRequireEnv",
       });
 
-      if (result.ok) fail("Expected error");
-      expect(result.error?.message).toMatch(/Environment is not set, and it is required/g);
+      expect(result.ok).toBe(false);
+      
+      !result.ok &&
+        expect(result.error?.message).toMatch(
+          /Environment is not set, and it is required/g
+        );
     });
 
     test(`subinvoke method with optional env works with env in ${implementation}`, async () => {
@@ -420,7 +418,7 @@ export const envTestCases = (implementation: string) => {
       const { uri: subinvokerUri } = Uri.from(`file/${subinvokerPath}`);
       const { uri: subinvokedUri } = Uri.from(`file/${subinvokedPath}`);
 
-      const subinvokedEnv =  {
+      const subinvokedEnv = {
         object: {
           prop: "object string",
         },
@@ -450,7 +448,7 @@ export const envTestCases = (implementation: string) => {
       };
 
       const envs = {
-        "mock/main": subinvokedEnv
+        "mock/main": subinvokedEnv,
       };
 
       const config = new PolywrapClientConfigBuilder()
@@ -465,8 +463,7 @@ export const envTestCases = (implementation: string) => {
         method: "subinvokeMethodOptionalEnv",
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual(expectedSubinvokedEnv);
+      expect(result).toEqual(ResultOk(expectedSubinvokedEnv));
     });
 
     test(`subinvoke method with optional env works without env in ${implementation}`, async () => {
@@ -486,8 +483,7 @@ export const envTestCases = (implementation: string) => {
         method: "subinvokeMethodOptionalEnv",
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual(null);
+      expect(result).toEqual(ResultOk(null));
     });
 
     test(`subinvoker env does not override subinvoked env in ${implementation}`, async () => {
@@ -537,7 +533,7 @@ export const envTestCases = (implementation: string) => {
           en: "FIRST",
           array: [1, 2],
         },
-        "mock/main": subinvokedEnv
+        "mock/main": subinvokedEnv,
       };
 
       const config = new PolywrapClientConfigBuilder()
@@ -552,38 +548,35 @@ export const envTestCases = (implementation: string) => {
         method: "subinvokeMethodRequireEnv",
       });
 
-      if (!result.ok) fail(result.error);
-      expect(result.value).toEqual(expectedSubinvokedEnv);
+      expect(result).toEqual(ResultOk(expectedSubinvokedEnv));
     });
   });
 
   describe("env client types", () => {
     test("plugin env types", async () => {
-      const implementationUri = Uri.from("wrap://ens/some-implementation.eth");
-      const envPlugin = mockPluginRegistration("ens/hello.eth");
+      const implementationUri = Uri.from("wrap://authority/some-implementation");
+      const envPlugin = mockPluginRegistration("authority/hello");
       const client = new PolywrapClient({
         resolver: RecursiveResolver.from([
           {
             uri: envPlugin.uri,
             package: envPlugin.package,
           },
-          { from: Uri.from("ens/hello.eth"), to: implementationUri },
+          { from: Uri.from("authority/hello"), to: implementationUri },
         ]),
-        envs: new UriMap([[Uri.from("wrap://ens/hello.eth"), { arg1: "10" }]]),
+        envs: new UriMap([[Uri.from("wrap://authority/hello"), { arg1: "10" }]]),
       });
 
       const mockEnv = await client.invoke({
-        uri: Uri.from("ens/hello.eth"),
+        uri: Uri.from("authority/hello"),
         method: "mockEnv",
       });
 
-      if (!mockEnv.ok) fail(mockEnv.error);
-      expect(mockEnv.value).toBeTruthy();
-      expect(mockEnv.value).toMatchObject({ arg1: "10" });
+      expect(mockEnv).toMatchObject(ResultOk({ arg1: "10" }));
     });
 
     test("inline plugin env types", async () => {
-      const implementationUri = "wrap://ens/some-implementation.eth";
+      const implementationUri = "wrap://authority/some-implementation";
       interface MockEnv extends Record<string, unknown> {
         arg1: number;
       }
@@ -607,9 +600,7 @@ export const envTestCases = (implementation: string) => {
         method: "mockEnv",
       });
 
-      if (!mockEnv.ok) fail(mockEnv.error);
-      expect(mockEnv.value).toBeTruthy();
-      expect(mockEnv.value).toMatchObject({ arg1: "10" });
+      expect(mockEnv).toMatchObject(ResultOk({ arg1: "10" }));
     });
   });
 };

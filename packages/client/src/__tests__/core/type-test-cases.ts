@@ -4,6 +4,7 @@ import { PolywrapClient } from "../../PolywrapClient";
 import BigNumber from "bignumber.js";
 import { PolywrapClientConfigBuilder } from "@polywrap/client-config-builder-js";
 import { GetPathToTestWrappers } from "@polywrap/test-cases";
+import { ResultOk } from "@polywrap/result";
 
 export const typeTestCases = (implementation: string) => {
   describe("types test cases", () => {
@@ -11,14 +12,14 @@ export const typeTestCases = (implementation: string) => {
       const config = new PolywrapClientConfigBuilder()
         .addDefaults()
         .setPackage(
-          "wrap://ens/memory-storage.polywrap.eth",
+          "wrap://plugin/memory-storage",
           memoryStoragePlugin()
         )
         .build();
       const client = new PolywrapClient(config);
 
       const uri = `fs/${GetPathToTestWrappers()}/asyncify/implementations/${implementation}`;
-      const subsequentInvokes = await client.invoke({
+      const subsequentInvokesResult = await client.invoke({
         uri: uri,
         method: "subsequentInvokes",
         args: {
@@ -29,43 +30,31 @@ export const typeTestCases = (implementation: string) => {
       const expected = Array.from(new Array(40), (_, index) =>
         index.toString()
       );
+      expect(subsequentInvokesResult).toEqual(ResultOk(expected));
 
-      if (!subsequentInvokes.ok) fail(subsequentInvokes.error);
-      expect(subsequentInvokes.value).toBeTruthy();
-      expect(subsequentInvokes.value).toEqual(expected);
-
-      const localVarMethod = await client.invoke<boolean>({
+      const localVarMethodResult = await client.invoke<boolean>({
         uri,
         method: "localVarMethod",
       });
+      expect(localVarMethodResult).toEqual(ResultOk(true));
 
-      if (!localVarMethod.ok) fail(localVarMethod.error);
-      expect(localVarMethod.value).toBeTruthy();
-      expect(localVarMethod.value).toEqual(true);
-
-      const globalVarMethod = await client.invoke<boolean>({
+      const globalVarMethodResult = await client.invoke<boolean>({
         uri,
         method: "globalVarMethod",
       });
-
-      if (!globalVarMethod.ok) fail(globalVarMethod.error);
-      expect(globalVarMethod.value).toBeTruthy();
-      expect(globalVarMethod.value).toEqual(true);
+      expect(globalVarMethodResult).toEqual(ResultOk(true));
 
       const largeStr = new Array(10000).join("polywrap ");
-      const setDataWithLargeArgs = await client.invoke<string>({
+      const setDataWithLargeArgsResult = await client.invoke<string>({
         uri,
         method: "setDataWithLargeArgs",
         args: {
           value: largeStr,
         },
       });
+      expect(setDataWithLargeArgsResult).toEqual(ResultOk(largeStr));
 
-      if (!setDataWithLargeArgs.ok) fail(setDataWithLargeArgs.error);
-      expect(setDataWithLargeArgs.value).toBeTruthy();
-      expect(setDataWithLargeArgs.value).toEqual(largeStr);
-
-      const setDataWithManyArgs = await client.invoke<string>({
+      const setDataWithManyArgsResult = await client.invoke<string>({
         uri,
         method: "setDataWithManyArgs",
         args: {
@@ -83,11 +72,10 @@ export const typeTestCases = (implementation: string) => {
           valueL: "polywrap l",
         },
       });
-
-      if (!setDataWithManyArgs.ok) fail(setDataWithManyArgs.error);
-      expect(setDataWithManyArgs.value).toBeTruthy();
-      expect(setDataWithManyArgs.value).toEqual(
-        "polywrap apolywrap bpolywrap cpolywrap dpolywrap epolywrap fpolywrap gpolywrap hpolywrap ipolywrap jpolywrap kpolywrap l"
+      expect(setDataWithManyArgsResult).toEqual(
+        ResultOk(
+          "polywrap apolywrap bpolywrap cpolywrap dpolywrap epolywrap fpolywrap gpolywrap hpolywrap ipolywrap jpolywrap kpolywrap l"
+        )
       );
 
       const createObj = (i: number) => {
@@ -107,7 +95,7 @@ export const typeTestCases = (implementation: string) => {
         };
       };
 
-      const setDataWithManyStructuredArgs = await client.invoke<string>({
+      const setDataWithManyStructuredArgsResult = await client.invoke<string>({
         uri,
         method: "setDataWithManyStructuredArgs",
         args: {
@@ -125,11 +113,7 @@ export const typeTestCases = (implementation: string) => {
           valueL: createObj(12),
         },
       });
-
-      if (!setDataWithManyStructuredArgs.ok)
-        fail(setDataWithManyStructuredArgs.error);
-      expect(setDataWithManyStructuredArgs.value).toBeTruthy();
-      expect(setDataWithManyStructuredArgs.value).toBe(true);
+      expect(setDataWithManyStructuredArgsResult).toEqual(ResultOk(true));
     });
 
     test(`bigint-type ${implementation}`, async () => {
@@ -146,9 +130,7 @@ export const typeTestCases = (implementation: string) => {
         },
       });
       let result = BigInt("123456789123456789") * BigInt("987654321987654321");
-      if (!response.ok) fail(response.error);
-      expect(response.value).toBeTruthy();
-      expect(response.value).toEqual(result.toString());
+      expect(response).toEqual(ResultOk(result.toString()));
 
       response = await client.invoke({
         uri,
@@ -169,9 +151,7 @@ export const typeTestCases = (implementation: string) => {
         BigInt("987654321987654321") *
         BigInt("987654321987654321987654321987654321");
 
-      if (!response.ok) fail(response.error);
-      expect(response.value).toBeTruthy();
-      expect(response.value).toEqual(result.toString());
+      expect(response).toEqual(ResultOk(result.toString()));
     });
 
     test(`bignumber-type ${implementation}`, async () => {
@@ -192,9 +172,7 @@ export const typeTestCases = (implementation: string) => {
       let prop1 = new BigNumber("98.7654321987654321");
       let result = arg1.times(prop1);
 
-      if (!response.ok) fail(response.error);
-      expect(response.value).toBeTruthy();
-      expect(response.value).toEqual(result.toFixed());
+      expect(response).toEqual(ResultOk(result.toFixed()));
 
       response = await client.invoke({
         uri,
@@ -215,9 +193,7 @@ export const typeTestCases = (implementation: string) => {
       const prop2 = new BigNumber("987.654321987654321987654321987654321");
       result = arg1.times(arg2).times(prop1).times(prop2);
 
-      if (!response.ok) fail(response.error);
-      expect(response.value).toBeTruthy();
-      expect(response.value).toEqual(result.toFixed());
+      expect(response).toEqual(ResultOk(result.toFixed()));
     });
 
     test(`bytes-type ${implementation}`, async () => {
@@ -233,10 +209,8 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!response.ok) fail(response.error);
-      expect(response.value).toBeTruthy();
-      expect(response.value).toEqual(
-        new TextEncoder().encode("Argument Value Sanity!")
+      expect(response).toEqual(
+        ResultOk(new TextEncoder().encode("Argument Value Sanity!"))
       );
     });
 
@@ -267,9 +241,7 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!method1b.ok) fail(method1b.error);
-      expect(method1b.value).toBeTruthy();
-      expect(method1b.value).toEqual(2);
+      expect(method1b).toEqual(ResultOk(2));
 
       let method1c = await client.invoke({
         uri,
@@ -294,9 +266,7 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!method2a.ok) fail(method2a.error);
-      expect(method2a.value).toBeTruthy();
-      expect(method2a.value).toEqual([0, 0, 2]);
+      expect(method2a).toEqual(ResultOk([0, 0, 2]));
     });
 
     test(`invalid-types ${implementation}`, async () => {
@@ -385,8 +355,7 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!parseResponse.ok) fail(parseResponse.error);
-      expect(parseResponse.value).toEqual(value);
+      expect(parseResponse).toEqual(ResultOk(value));
 
       const values = [
         JSON.stringify({ bar: "foo" }),
@@ -401,8 +370,7 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!stringifyResponse.ok) fail(stringifyResponse.error);
-      expect(stringifyResponse.value).toEqual(values.join(""));
+      expect(stringifyResponse).toEqual(ResultOk(values.join("")));
 
       const object = {
         jsonA: JSON.stringify({ foo: "bar" }),
@@ -417,9 +385,8 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!stringifyObjectResponse.ok) fail(stringifyObjectResponse.error);
-      expect(stringifyObjectResponse.value).toEqual(
-        object.jsonA + object.jsonB
+      expect(stringifyObjectResponse).toEqual(
+        ResultOk(object.jsonA + object.jsonB)
       );
 
       const json = {
@@ -434,9 +401,8 @@ export const typeTestCases = (implementation: string) => {
         args: json,
       });
 
-      if (!methodJSONResponse.ok) fail(methodJSONResponse.error);
       const methodJSONResult = JSON.stringify(json);
-      expect(methodJSONResponse.value).toEqual(methodJSONResult);
+      expect(methodJSONResponse).toEqual(ResultOk(methodJSONResult));
 
       // @TODO: Remove this once https://github.com/polywrap/toolchain/issues/633 is implemented & tested
       if (implementation === "rs") {
@@ -452,8 +418,7 @@ export const typeTestCases = (implementation: string) => {
           },
         });
 
-        if (!parseReservedResponse.ok) fail(parseReservedResponse.error);
-        expect(parseReservedResponse.value).toEqual(reserved);
+        expect(parseReservedResponse).toEqual(ResultOk(reserved));
 
         const stringifyReservedResponse = await client.invoke<string>({
           uri,
@@ -463,10 +428,8 @@ export const typeTestCases = (implementation: string) => {
           },
         });
 
-        if (!stringifyReservedResponse.ok)
-          fail(stringifyReservedResponse.error);
-        expect(stringifyReservedResponse.value).toEqual(
-          JSON.stringify(reserved)
+        expect(stringifyReservedResponse).toEqual(
+          ResultOk(JSON.stringify(reserved))
         );
       }
     });
@@ -576,22 +539,22 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!method1a.ok) fail(method1a.error);
-      expect(method1a.value).toBeTruthy();
-      expect(method1a.value).toEqual([
-        {
-          prop: "arg1 prop",
-          nested: {
-            prop: "arg1 nested prop",
+      expect(method1a).toEqual(
+        ResultOk([
+          {
+            prop: "arg1 prop",
+            nested: {
+              prop: "arg1 nested prop",
+            },
           },
-        },
-        {
-          prop: "",
-          nested: {
+          {
             prop: "",
+            nested: {
+              prop: "",
+            },
           },
-        },
-      ]);
+        ])
+      );
 
       const method1b = await client.invoke({
         uri,
@@ -612,22 +575,22 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!method1b.ok) fail(method1b.error);
-      expect(method1b.value).toBeTruthy();
-      expect(method1b.value).toEqual([
-        {
-          prop: "arg1 prop",
-          nested: {
-            prop: "arg1 nested prop",
+      expect(method1b).toEqual(
+        ResultOk([
+          {
+            prop: "arg1 prop",
+            nested: {
+              prop: "arg1 nested prop",
+            },
           },
-        },
-        {
-          prop: "arg2 prop",
-          nested: {
-            prop: "arg2 circular prop",
+          {
+            prop: "arg2 prop",
+            nested: {
+              prop: "arg2 circular prop",
+            },
           },
-        },
-      ]);
+        ])
+      );
 
       const method2a = await client.invoke({
         uri,
@@ -642,14 +605,14 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!method2a.ok) fail(method2a.error);
-      expect(method2a.value).toBeTruthy();
-      expect(method2a.value).toEqual({
-        prop: "arg prop",
-        nested: {
-          prop: "arg nested prop",
-        },
-      });
+      expect(method2a).toEqual(
+        ResultOk({
+          prop: "arg prop",
+          nested: {
+            prop: "arg nested prop",
+          },
+        })
+      );
 
       const method2b = await client.invoke({
         uri,
@@ -664,8 +627,7 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!method2b.ok) fail(method2b.error);
-      expect(method2b.value).toEqual(null);
+      expect(method2b).toEqual(ResultOk(null));
 
       const method3 = await client.invoke({
         uri,
@@ -680,17 +642,17 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!method3.ok) fail(method3.error);
-      expect(method3.value).toBeTruthy();
-      expect(method3.value).toEqual([
-        null,
-        {
-          prop: "arg prop",
-          nested: {
-            prop: "arg nested prop",
+      expect(method3).toEqual(
+        ResultOk([
+          null,
+          {
+            prop: "arg prop",
+            nested: {
+              prop: "arg nested prop",
+            },
           },
-        },
-      ]);
+        ])
+      );
 
       const method4 = await client.invoke({
         uri,
@@ -702,14 +664,14 @@ export const typeTestCases = (implementation: string) => {
         },
       });
 
-      if (!method4.ok) fail(method4.error);
-      expect(method4.value).toBeTruthy();
-      expect(method4.value).toEqual({
-        prop: "1234",
-        nested: {
-          prop: "nested prop",
-        },
-      });
+      expect(method4).toEqual(
+        ResultOk({
+          prop: "1234",
+          nested: {
+            prop: "nested prop",
+          },
+        })
+      );
     });
 
     test(`map-type ${implementation}`, async () => {
@@ -737,8 +699,7 @@ export const typeTestCases = (implementation: string) => {
           map: mapClass,
         },
       });
-      if (!returnMapResponse1.ok) fail(returnMapResponse1.error);
-      expect(returnMapResponse1.value).toEqual(mapClass);
+      expect(returnMapResponse1).toEqual(ResultOk(mapClass));
 
       const returnMapResponse2 = await client.invoke<Map<string, number>>({
         uri,
@@ -747,8 +708,7 @@ export const typeTestCases = (implementation: string) => {
           map: mapRecord,
         },
       });
-      if (!returnMapResponse2.ok) fail(returnMapResponse2.error);
-      expect(returnMapResponse2.value).toEqual(mapClass);
+      expect(returnMapResponse2).toEqual(ResultOk(mapClass));
 
       const getKeyResponse1 = await client.invoke<number>({
         uri,
@@ -761,8 +721,7 @@ export const typeTestCases = (implementation: string) => {
           key: "Hello",
         },
       });
-      if (!getKeyResponse1.ok) fail(getKeyResponse1.error);
-      expect(getKeyResponse1.value).toEqual(mapClass.get("Hello"));
+      expect(getKeyResponse1).toEqual(ResultOk(mapClass.get("Hello")));
 
       const getKeyResponse2 = await client.invoke<number>({
         uri,
@@ -775,8 +734,7 @@ export const typeTestCases = (implementation: string) => {
           key: "Heyo",
         },
       });
-      if (!getKeyResponse2.ok) fail(getKeyResponse2.error);
-      expect(getKeyResponse2.value).toEqual(mapRecord.Heyo);
+      expect(getKeyResponse2).toEqual(ResultOk(mapRecord.Heyo));
 
       const returnCustomMap = await client.invoke<{
         map: Map<string, number>;
@@ -791,11 +749,12 @@ export const typeTestCases = (implementation: string) => {
           },
         },
       });
-      if (!returnCustomMap.ok) fail(returnCustomMap.error);
-      expect(returnCustomMap.value).toEqual({
-        map: mapClass,
-        nestedMap: nestedMapClass,
-      });
+      expect(returnCustomMap).toEqual(
+        ResultOk({
+          map: mapClass,
+          nestedMap: nestedMapClass,
+        })
+      );
 
       const returnNestedMap = await client.invoke<
         Map<string, Map<string, number>>
@@ -806,8 +765,7 @@ export const typeTestCases = (implementation: string) => {
           foo: nestedMapClass,
         },
       });
-      if (!returnNestedMap.ok) fail(returnNestedMap.error);
-      expect(returnNestedMap.value).toEqual(nestedMapClass);
+      expect(returnNestedMap).toEqual(ResultOk(nestedMapClass));
     });
   });
 };

@@ -2,29 +2,34 @@
 import * as Common from "./common";
 
 import { IWrapPackage } from "@polywrap/core-js";
-import { Bundle } from "@polywrap/config-bundle-types-js";
+import { BundlePackage } from "@polywrap/config-bundle-types-js";
 import { ExtendableUriResolver } from "@polywrap/uri-resolver-extensions-js";
 
 // $start: bundle-node
 import { fileSystemPlugin } from "@polywrap/file-system-plugin-js";
 import * as fileSystemResolver from "./embeds/file-system-resolver/wrap";
 
-export const bundle: Bundle = {
+interface SysNodeBundle extends Common.SysCommonBundle {
+  fileSystem: BundlePackage;
+  fileSystemResolver: BundlePackage;
+}
+
+export const bundle: SysNodeBundle = {
   ...Common.bundle,
   fileSystem: {
-    uri: "plugin/file-system@1.0.0",
+    uri: "plugin/file-system@1.0",
     package: fileSystemPlugin({}) as IWrapPackage,
-    implements: ["ens/wraps.eth:file-system@1.0.0"],
-    redirectFrom: ["ens/wraps.eth:file-system@1.0.0"],
+    implements: ["wrapscan.io/polywrap/file-system@1.0"],
+    redirectFrom: ["wrapscan.io/polywrap/file-system@1.0"],
   },
   fileSystemResolver: {
-    uri: "embed/file-system-uri-resolver-ext@1.0.1",
+    uri: "embed/file-system-uri-resolver@1.0.1",
     package: fileSystemResolver.wasmPackage,
     implements: [
-      "ens/wraps.eth:file-system-uri-resolver-ext@1.0.1",
+      "wrapscan.io/polywrap/file-system-uri-resolver@1.0",
       ExtendableUriResolver.defaultExtInterfaceUris[0].uri,
     ],
-    redirectFrom: ["ens/wraps.eth:file-system-uri-resolver-ext@1.0.1"],
+    redirectFrom: ["wrapscan.io/polywrap/file-system-uri-resolver@1.0"],
   },
 };
 // $end

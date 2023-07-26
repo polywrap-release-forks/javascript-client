@@ -23,8 +23,7 @@ export class ExtendableUriResolver extends UriResolverAggregatorBase<
   // $start: ExtendableUriResolver-extInterfaceUri-static
   /** The supported interface URIs to which resolver-ext implementations should be registered */
   public static defaultExtInterfaceUris: Uri[] = [
-    Uri.from("wrap://ens/wraps.eth:uri-resolver-ext@1.1.0"),
-    Uri.from("wrap://ens/wraps.eth:uri-resolver-ext@1.0.0"),
+    Uri.from("wrapscan.io/polywrap/uri-resolver@1.0"),
   ];
   // $end
 

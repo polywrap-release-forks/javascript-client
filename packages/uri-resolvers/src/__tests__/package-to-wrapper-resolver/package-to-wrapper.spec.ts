@@ -12,6 +12,7 @@ import { expectHistory } from "../helpers/expectHistory";
 import { PolywrapCoreClient } from "@polywrap/core-client-js";
 import { PluginPackage } from "@polywrap/plugin-js";
 import { PackageToWrapperResolver } from "../../packages";
+import { ResultOk } from "@polywrap/result";
 
 jest.setTimeout(20000);
 
@@ -77,15 +78,14 @@ describe("PackageToWrapperResolver", () => {
       "package-to-wrapper"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/package");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/package",
+        },
+      })
+    );
   });
 
   it("resolves a wrapper to a wrapper", async () => {
@@ -104,15 +104,14 @@ describe("PackageToWrapperResolver", () => {
       "wrapper-to-wrapper"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "wrapper") {
-      fail("Expected a wrapper, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/wrapper");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "wrapper",
+        uri: {
+          uri: "wrap://test/wrapper",
+        },
+      })
+    );
   });
 
   it("resolves a URI to a URI", async () => {
@@ -131,14 +130,13 @@ describe("PackageToWrapperResolver", () => {
       "uri-to-uri"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a URI, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/to");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/to",
+        },
+      })
+    );
   });
 });

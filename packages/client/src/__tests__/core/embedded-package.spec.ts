@@ -35,10 +35,7 @@ describe("Embedded package", () => {
       },
     });
 
-    if (!result.ok) fail(result.error);
-    expect(result.value).toBeTruthy();
-    expect(typeof result.value).toBe("number");
-    expect(result.value).toEqual(2);
+    expect(result).toStrictEqual(ResultOk(2));
   });
 
   it("can get a file from wrapper", async () => {
@@ -154,9 +151,7 @@ const testEmbeddedPackageWithFile = async (
   const receivedManifestResult = await client.getFile(wrapperUri, {
     path: "wrap.info",
   });
-  if (!receivedManifestResult.ok) fail(receivedManifestResult.error);
-  const receivedManifest = receivedManifestResult.value as Uint8Array;
-  expect(receivedManifest).toEqual(expectedManifest);
+  expect(receivedManifestResult).toEqual(ResultOk(expectedManifest))
 
   const expectedWasmModule = await fs.promises.readFile(
     `${wrapperPath}/wrap.wasm`
@@ -164,16 +159,12 @@ const testEmbeddedPackageWithFile = async (
   const receivedWasmModuleResult = await client.getFile(wrapperUri, {
     path: "wrap.wasm",
   });
-  if (!receivedWasmModuleResult.ok) fail(receivedWasmModuleResult.error);
-  const receivedWasmModule = receivedWasmModuleResult.value as Uint8Array;
-  expect(receivedWasmModule).toEqual(expectedWasmModule);
+  expect(receivedWasmModuleResult).toEqual(ResultOk(expectedWasmModule))
+
 
   const receivedHelloFileResult = await client.getFile(wrapperUri, {
     path: filePath,
     encoding: "utf-8",
   });
-  if (!receivedHelloFileResult.ok) fail(receivedHelloFileResult.error);
-  const receivedHelloFile = receivedHelloFileResult.value as Uint8Array;
-
-  expect(receivedHelloFile).toEqual(fileText);
+  expect(receivedHelloFileResult).toEqual(ResultOk(fileText))
 };

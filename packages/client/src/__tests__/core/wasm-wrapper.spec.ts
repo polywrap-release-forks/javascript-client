@@ -1,4 +1,4 @@
-import { msgpackDecode } from "@polywrap/msgpack-js";
+import { msgpackEncode } from "@polywrap/msgpack-js";
 import { GetPathToTestWrappers } from "@polywrap/test-cases";
 import fs from "fs";
 import { Uri, PolywrapClient, IWrapPackage } from "../..";
@@ -7,6 +7,7 @@ import { PluginModule, PluginPackage } from "@polywrap/plugin-js";
 import { UriResolver } from "@polywrap/uri-resolvers-js";
 import { PolywrapClientConfigBuilder } from "@polywrap/client-config-builder-js";
 import { mockPluginRegistration, ErrResult } from "../helpers";
+import { ResultOk } from "@polywrap/result";
 
 jest.setTimeout(200000);
 
@@ -34,11 +35,7 @@ describe("wasm-wrapper", () => {
         b: 1
       },
     });
-
-    if (!result.ok) fail(result.error);
-    expect(result.value).toBeTruthy();
-    expect(typeof result.value).toBe("number");
-    expect(result.value).toEqual(2);
+    expect(result).toStrictEqual(ResultOk(2));
   });
 
   test("can invoke with typed URI", async () => {
@@ -52,10 +49,7 @@ describe("wasm-wrapper", () => {
       },
     });
 
-    if (!result.ok) fail(result.error);
-    expect(result.value).toBeTruthy();
-    expect(typeof result.value).toBe("number");
-    expect(result.value).toEqual(2);
+    expect(result).toStrictEqual(ResultOk(2));
   });
 
   test("invoke with decode defaulted to true works as expected", async () => {
@@ -69,10 +63,7 @@ describe("wasm-wrapper", () => {
       },
     });
 
-    if (!result.ok) fail(result.error);
-    expect(result.value).toBeTruthy();
-    expect(typeof result.value).toBe("number");
-    expect(result.value).toEqual(2);
+    expect(result).toStrictEqual(ResultOk(2));
   });
 
   test("invoke with decode set to false works as expected", async () => {
@@ -87,17 +78,14 @@ describe("wasm-wrapper", () => {
       encodeResult: true,
     });
 
-    if (!result.ok) fail(result.error);
-    expect(result.value).toBeTruthy();
-    expect(result.value instanceof Uint8Array).toBeTruthy();
-    expect(msgpackDecode(result.value as Uint8Array)).toEqual(2);
+    expect(result).toEqual(ResultOk(msgpackEncode(2)));
   });
 
   it("should invoke wrapper with custom redirects", async () => {
     const config = new PolywrapClientConfigBuilder()
       .addDefaults()
-      .setRedirect(wrapperUri.uri, "wrap://ens/mock.polywrap.eth")
-      .setPackage("wrap://ens/mock.polywrap.eth", mockPlugin())
+      .setRedirect(wrapperUri.uri, "wrap://authority/mock.polywrap")
+      .setPackage("wrap://authority/mock.polywrap", mockPlugin())
       .build();
     const client = new PolywrapClient(config);
 
@@ -110,15 +98,13 @@ describe("wasm-wrapper", () => {
       },
     });
 
-    if (!result.ok) fail(result.error);
-    expect(result.value).toBeTruthy();
-    expect(result.value).toEqual("plugin response");
+    expect(result).toEqual(ResultOk("plugin response"));
   });
 
   it("should allow clone + reconfigure of redirects", async () => {
     let builder = new PolywrapClientConfigBuilder()
       .add({
-        packages: { "wrap://ens/mock.polywrap.eth": mockPlugin() },
+        packages: { "wrap://authority/mock.polywrap": mockPlugin() },
       })
       .addDefaults();
 
@@ -133,12 +119,10 @@ describe("wasm-wrapper", () => {
       },
     });
 
-    if (!clientResult.ok) fail(clientResult.error);
-    expect(clientResult.value).toBeTruthy();
-    expect(clientResult.value).toEqual(2);
+    expect(clientResult).toEqual(ResultOk(2));
 
     const redirects = {
-      [wrapperUri.uri]: "wrap://ens/mock.polywrap.eth",
+      [wrapperUri.uri]: "wrap://authority/mock.polywrap",
     };
 
     builder = builder.add({ redirects });
@@ -154,9 +138,7 @@ describe("wasm-wrapper", () => {
       },
     });
 
-    if (!newClientResult.ok) fail(newClientResult.error);
-    expect(newClientResult.value).toBeTruthy();
-    expect(newClientResult.value).toEqual("plugin response");
+    expect(newClientResult).toEqual(ResultOk("plugin response"));
   });
 
   test("get file from wrapper", async () => {
@@ -169,10 +151,7 @@ describe("wasm-wrapper", () => {
     const receivedManifestResult = await client.getFile(wrapperUri, {
       path: "./wrap.info",
     });
-    if (!receivedManifestResult.ok) fail(receivedManifestResult.error);
-    const receivedManifest = receivedManifestResult.value as Uint8Array;
-
-    expect(receivedManifest).toEqual(expectedManifest);
+    expect(receivedManifestResult).toEqual(ResultOk(expectedManifest));
 
     const expectedWasmModule = new Uint8Array(
       await fs.promises.readFile(`${wrapperPath}/wrap.wasm`)
@@ -181,19 +160,16 @@ describe("wasm-wrapper", () => {
     const receivedWasmModuleResult = await client.getFile(wrapperUri, {
       path: "./wrap.wasm",
     });
-    if (!receivedWasmModuleResult.ok) fail(receivedWasmModuleResult.error);
-    const receivedWasmModule = receivedWasmModuleResult.value as Uint8Array;
-
-    expect(receivedWasmModule).toEqual(expectedWasmModule);
+    expect(receivedWasmModuleResult).toEqual(ResultOk(expectedWasmModule));
 
     const pluginClient = new PolywrapClient({
       resolver: UriResolver.from([
-        mockPluginRegistration("ens/mock-plugin.eth"),
+        mockPluginRegistration("authority/mock-plugin"),
       ]),
     });
 
     let pluginGetFileResult = await pluginClient.getFile(
-      "ens/mock-plugin.eth",
+      "authority/mock-plugin",
       {
         path: "./index.js",
       }

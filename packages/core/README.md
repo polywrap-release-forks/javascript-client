@@ -341,6 +341,7 @@ export interface UriConfig {
  * A Polywrap URI. Some examples of valid URIs are:
  * wrap://https/domain.com
  * wrap://ipfs/QmHASH
+ * wrap://wrapscan.io/polywrap/wrap@1.2.3
  * wrap://ens/sub.domain.eth
  * wrap://file/directory/file.txt
  *
@@ -355,8 +356,8 @@ export interface UriConfig {
  * Breaking down the various parts of the URI, as it applies
  * to [the URI standard](https://tools.ietf.org/html/rfc3986#section-3):
  * **wrap://** - URI Scheme: differentiates Polywrap URIs.
- * **ens/** - URI Authority: allows the Polywrap URI resolution algorithm to determine an authoritative URI resolver.
- * **sub.domain.eth** - URI Path: tells the Authority where the Wrapper resides.
+ * **wrapscan.io/** - URI Authority: allows the Polywrap URI resolution algorithm to determine an authoritative URI resolver.
+ * **polywrap/wrap@1.2.3** - URI Path: tells the Authority where the Wrapper resides.
  */
 export class Uri {
 ```

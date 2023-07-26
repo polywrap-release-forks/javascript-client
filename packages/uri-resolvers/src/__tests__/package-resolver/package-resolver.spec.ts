@@ -1,11 +1,9 @@
-import {
-  Uri,
-  UriResolutionContext,
-} from "@polywrap/core-js";
+import { Uri, UriResolutionContext } from "@polywrap/core-js";
 import { expectHistory } from "../helpers/expectHistory";
 import { PolywrapCoreClient } from "@polywrap/core-client-js";
 import { PackageResolver } from "../../packages";
 import { PluginPackage } from "@polywrap/plugin-js";
+import { ResultOk } from "@polywrap/result";
 
 jest.setTimeout(20000);
 
@@ -17,7 +15,7 @@ describe("PackageResolver", () => {
       resolver: new PackageResolver(
         Uri.from("test/package"),
         PluginPackage.from(() => ({}))
-      )
+      ),
     });
 
     let resolutionContext = new UriResolutionContext();
@@ -26,18 +24,17 @@ describe("PackageResolver", () => {
     await expectHistory(
       resolutionContext.getHistory(),
       "package-resolver",
-      "can-resolve-a-package",
+      "can-resolve-a-package"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "package") {
-      fail("Expected a package, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/package");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "package",
+        uri: {
+          uri: "wrap://test/package",
+        },
+      })
+    );
   });
 
   it("does not resolve a package when not a match", async () => {
@@ -47,7 +44,7 @@ describe("PackageResolver", () => {
       resolver: new PackageResolver(
         Uri.from("test/package"),
         PluginPackage.from(() => ({}))
-      )
+      ),
     });
 
     let resolutionContext = new UriResolutionContext();
@@ -56,17 +53,16 @@ describe("PackageResolver", () => {
     await expectHistory(
       resolutionContext.getHistory(),
       "package-resolver",
-      "not-a-match",
+      "not-a-match"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/not-a-match");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/not-a-match",
+        },
+      })
+    );
   });
 });

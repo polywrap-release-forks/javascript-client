@@ -1,10 +1,8 @@
-import {
-  Uri,
-  UriResolutionContext,
-} from "@polywrap/core-js";
+import { Uri, UriResolutionContext } from "@polywrap/core-js";
 import { expectHistory } from "../helpers/expectHistory";
 import { PolywrapCoreClient } from "@polywrap/core-client-js";
 import { RedirectResolver } from "../../redirects";
+import { ResultOk } from "@polywrap/result";
 
 jest.setTimeout(20000);
 
@@ -15,8 +13,8 @@ describe("RedirectResolver", () => {
     const client = new PolywrapCoreClient({
       resolver: new RedirectResolver(
         Uri.from("test/from"),
-        Uri.from("test/to"),
-      )
+        Uri.from("test/to")
+      ),
     });
 
     let resolutionContext = new UriResolutionContext();
@@ -25,18 +23,17 @@ describe("RedirectResolver", () => {
     await expectHistory(
       resolutionContext.getHistory(),
       "redirect-resolver",
-      "can-redirect-a-uri",
+      "can-redirect-a-uri"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/to");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/to",
+        },
+      })
+    );
   });
 
   it("does not redirect a URI when not a match", async () => {
@@ -45,8 +42,8 @@ describe("RedirectResolver", () => {
     const client = new PolywrapCoreClient({
       resolver: new RedirectResolver(
         Uri.from("test/from"),
-        Uri.from("test/to"),
-      )
+        Uri.from("test/to")
+      ),
     });
 
     let resolutionContext = new UriResolutionContext();
@@ -55,17 +52,16 @@ describe("RedirectResolver", () => {
     await expectHistory(
       resolutionContext.getHistory(),
       "redirect-resolver",
-      "not-a-match",
+      "not-a-match"
     );
 
-    if (!result.ok) {
-      fail(result.error);
-    }
-
-    if (result.value.type !== "uri") {
-      fail("Expected a uri, received: " + result.value.type);
-    }
-
-    expect(result.value.uri.uri).toEqual("wrap://test/not-a-match");
+    expect(result).toMatchObject(
+      ResultOk({
+        type: "uri",
+        uri: {
+          uri: "wrap://test/not-a-match",
+        },
+      })
+    );
   });
 });
