@@ -125,7 +125,7 @@ export class Uri {
       "wrapscan.io/polywrap/wrap@1.2.3\n" +
       "ipfs/QmHASH\n" +
       "https://domain.com/path\n" +
-      "wrap://ens/domain.eth\n"
+      "wrap://ens/domain.eth\n" +
       "wrap://ipfs/QmHASH\n\n";
 
     if (!input) {
