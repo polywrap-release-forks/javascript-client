@@ -1,8 +1,23 @@
-# Polywrap Origin (0.12.0-pre.1)
-## Breaking changes
-* [PR-56](https://github.com/polywrap/javascript-client/pull/56) **Wrapscan resolver**
-  * Added the [Wrapscan URI resolver](https://github.com/polywrap/uri-resolver-extensions/tree/master/implementations/wrapscan) as one of the default URI resolvers
-  * You can now use `wrapscan/author/wrap@version` URIs to resolve Wraps published to Wrapscan
+# Polywrap Origin (0.12.0)
+## Features
+**`@polywrap/sys-config-bundle-js`:**
+* [PR-56](https://github.com/polywrap/javascript-client/pull/56) **Wrapscan URI Resolution Using Sys Bundle**
+  * Resolving `wrapscan.io/` URIs is now possible by simply adding the "sys" bundle to your client's configuration.
+  * The "sys" bundle now includes: `wrapscanResolver`, `ipfsResolver`, and `ipfsHttpClient`.
+* [PR-55](https://github.com/polywrap/javascript-client/pull/55) **GitHub URI Resolution Using Sys Bundle**
+  * Resolving `github.com/` URIs is now possible by simply adding the "sys" bundle to your client's configuration.
+  * NOTE: this requires a `URI.txt` file located in the directory you're linking to on GitHub.
+
+## Breaking Changes
+**`@polywrap/client-js`:**
+* [PR-62](https://github.com/polywrap/javascript-client/pull/62) **Migrate All URIs To Wrapscan (Remove ENS URIs)**
+  * All URIs used within the client's packages (uri-resolver-extensions, config-bundles, etc) have been migrated to `wrapscan.io/` based URIs.
+  * All `ens/` URIs have been deprecated, but resolving `ens/` URIs is still supported.
+
+## Bugs
+**`@polywrap/core-js`:**
+* [PR-61](https://github.com/polywrap/javascript-client/pull/61) **URI Should Start W/ Word Character**
+  * URIs should not start with non-word characters, for example `../`.
 
 # Polywrap Origin (0.11.0)
 ## Features
