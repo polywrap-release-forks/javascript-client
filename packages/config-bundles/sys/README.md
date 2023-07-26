@@ -18,7 +18,19 @@ export const ipfsProviders: string[] = [
   "https://ipfs.io",
 ];
 
-export const bundle: Bundle = {
+export interface SysCommonBundle extends Bundle {
+  logger: BundlePackage;
+  datetime: BundlePackage;
+  concurrent: BundlePackage;
+  http: BundlePackage;
+  githubResolver: BundlePackage;
+  httpResolver: BundlePackage;
+  wrapscanResolver: BundlePackage;
+  ipfsHttpClient: BundlePackage;
+  ipfsResolver: BundlePackage;
+}
+
+export const bundle: SysCommonBundle = {
   logger: {
     uri: "plugin/logger@1.0.0",
     package: loggerPlugin({}) as IWrapPackage,
@@ -94,7 +106,12 @@ If you're using this package within Node.JS, you'll also have the following conf
 import { fileSystemPlugin } from "@polywrap/file-system-plugin-js";
 import * as fileSystemResolver from "./embeds/file-system-resolver/wrap";
 
-export const bundle: Bundle = {
+interface SysNodeBundle extends Common.SysCommonBundle {
+  fileSystem: BundlePackage;
+  fileSystemResolver: BundlePackage;
+}
+
+export const bundle: SysNodeBundle = {
   ...Common.bundle,
   fileSystem: {
     uri: "plugin/file-system@1.0",
