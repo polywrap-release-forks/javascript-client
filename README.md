@@ -5,10 +5,6 @@
 Implementation of the Polywrap client in JavaScript.
 
 ## Installation
-Switching to Node.js version 18 is required. Execute nvm use, if you have Node Version Manager.
-
-Then, in your project, run:
-
 ```
 npm install @polywrap/client
 # or
