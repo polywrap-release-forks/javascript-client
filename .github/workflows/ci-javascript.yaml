@@ -155,6 +155,7 @@ jobs:
       - name: Examples
         run: |
           cd examples
+          yarn
           yarn run:hello-world
           yarn run:fs
           yarn run:http

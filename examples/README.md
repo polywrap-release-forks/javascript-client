@@ -1,5 +1,7 @@
 # Polywrap JS Client Examples
 
+Before running any example you must run `yarn` in the `examples` folder
+
 ## Hello World
 
 Invokes the logger wrap, which interacts with the logger plugin. It shows a console.log message from WASM world
