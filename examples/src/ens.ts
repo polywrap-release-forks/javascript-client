@@ -10,12 +10,12 @@ import {
 } from "@polywrap/ethereum-wallet-js";
 
 const main = async () => {
-  const { uri: ethereumPluginUri } = Uri.from(
+  const { uri: ethereumWalletUri } = Uri.from(
     "wrapscan.io/polywrap/ethereum-wallet@1.0"
   );
   const builder = new PolywrapClientConfigBuilder();
   builder.addBundle("sys");
-  const ethereumPlugin = ethereumWalletPlugin({
+  const ethereumWalletPackage = ethereumWalletPlugin({
     connections: new Connections({
       networks: {
         mainnet: new Connection({
@@ -25,7 +25,7 @@ const main = async () => {
       },
     }),
   });
-  builder.setPackage(ethereumPluginUri, ethereumPlugin);
+  builder.setPackage(ethereumWalletUri, ethereumWalletPackage);
   const client = new PolywrapClient(builder.build());
 
   const resolverAddress = await client.invoke<String>({
