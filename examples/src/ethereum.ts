@@ -10,13 +10,16 @@ import {
 } from "@polywrap/ethereum-wallet-js";
 import { Wallet } from "ethers";
 
+const ETHEREUM_CORE_URI = "wrapscan.io/polywrap/ethers@1.0.0";
+const ETHEREUM_UTIL_URI = "wrapscan.io/polywrap/ethers-utils@1.0.0";
+
 const main = async () => {
-  const { uri: ethereumPluginUri } = Uri.from(
+  const { uri: ethereumWalletUri } = Uri.from(
     "wrapscan.io/polywrap/ethereum-wallet@1.0"
   );
   const builder = new PolywrapClientConfigBuilder();
   builder.addBundle("sys");
-  const ethereumPlugin = ethereumWalletPlugin({
+  const ethereumWalletPackage = ethereumWalletPlugin({
     connections: new Connections({
       networks: {
         mainnet: new Connection({
@@ -29,11 +32,11 @@ const main = async () => {
       },
     }),
   });
-  builder.setPackage(ethereumPluginUri, ethereumPlugin);
+  builder.setPackage(ethereumWalletUri, ethereumWalletPackage);
   const client = new PolywrapClient(builder.build());
 
   const balance = await client.invoke<String>({
-    uri: "wrapscan.io/polywrap/ethers@1.0.0",
+    uri: ETHEREUM_CORE_URI,
     method: "getBalance",
     args: {
       address: "0x00000000219ab540356cbb839cbe05303d7705fa",
@@ -47,7 +50,7 @@ const main = async () => {
   console.log("Balance in Wei: " + balance.value);
 
   const balanceInEth = await client.invoke<String>({
-    uri: "wrapscan.io/polywrap/ethers-utils@1.0.0",
+    uri: ETHEREUM_UTIL_URI,
     method: "toEth",
     args: {
       wei: balance.value,
@@ -113,7 +116,7 @@ const main = async () => {
 
   console.log("Signing typed data...");
   const signedData = await client.invoke<string>({
-    uri: "wrapscan.io/polywrap/ethers@1.0.0",
+    uri: ETHEREUM_CORE_URI,
     method: "signTypedData",
     args: {
       payload: JSON.stringify({ domain, primaryType: "Mail", types, message }),

@@ -12,8 +12,9 @@ interface Response {
   body: String | undefined;
 }
 
+const { uri } = Uri.from("wrapscan.io/polywrap/http@1.0");
+
 const main = async () => {
-  const { uri } = Uri.from("plugin/http");
   const builder = new PolywrapClientConfigBuilder();
   builder.setPackage(uri, httpPlugin({}));
   const client = new PolywrapClient(builder.build());

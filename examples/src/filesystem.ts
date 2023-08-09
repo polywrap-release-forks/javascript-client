@@ -2,13 +2,14 @@ import {
   PolywrapClient,
   PolywrapClientConfigBuilder,
 } from "@polywrap/client-js";
-import { httpPlugin } from "@polywrap/http-plugin-js";
+import { fileSystemPlugin } from "@polywrap/file-system-plugin-js";
 import { Uri } from "@polywrap/core-js";
 
+const { uri } = Uri.from("wrapscan.io/polywrap/file-system@1.0");
+
 const main = async () => {
-  const { uri } = Uri.from("plugin/http");
   const builder = new PolywrapClientConfigBuilder();
-  builder.setPackage(uri, httpPlugin({}));
+  builder.setPackage(uri, fileSystemPlugin({}));
   const client = new PolywrapClient(builder.build());
 
   const filePath = "./fs-example.txt";

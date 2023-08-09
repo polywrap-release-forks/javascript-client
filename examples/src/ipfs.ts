@@ -4,9 +4,10 @@ import {
 } from "@polywrap/client-js";
 import { Uri } from "@polywrap/core-js";
 
+const { uri } = Uri.from("wrapscan.io/polywrap/ipfs-http-client@1.0");
+const ipfsProvider = "http://localhost:5001";
+
 const main = async () => {
-  const { uri } = Uri.from("wrapscan.io/polywrap/ipfs-http-client@1.0");
-  const ipfsProvider = "http://localhost:5001";
   const builder = new PolywrapClientConfigBuilder();
   builder.addBundle("sys");
   const client = new PolywrapClient(builder.build());
