@@ -37,16 +37,12 @@ if (!result.ok) {
   throw Error("Log message error: " + result.error);
 }
 ```
-
-# Getting Started
-
-Have questions or want to get involved? Join our community [Discord](https://discord.polywrap.io) or [open an issue](https://github.com/polywrap/javascript-client/issues) on Github.
-
-For detailed information about Polywrap and the WRAP standard, visit our [developer documentation](https://docs.polywrap.io/).
-
-
-
 # Resources
 
+- [Documentation](https://docs.polywrap.io/)
 - [Examples](./examples/)
 - [Features supported](https://github.com/polywrap/client-readiness/tree/main/clients/js/src/features)
+
+# Support
+
+For any questions or problems, please visit our [Discord](https://discord.polywrap.io).
