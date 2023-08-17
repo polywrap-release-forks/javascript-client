@@ -156,7 +156,7 @@ jobs:
         run: |
           cd examples
           yarn
-          yarn run:hello-world
+          yarn run:logger
           yarn run:fs
           yarn run:http
           yarn run:ipfs

@@ -5,7 +5,7 @@
   "scripts": {
     "run:fs": "ts-node src/filesystem.ts",
     "run:http": "ts-node src/http.ts",
-    "run:hello-world": "ts-node src/hello-world.ts",
+    "run:logger": "ts-node src/logger.ts",
     "run:ipfs": "ts-node src/ipfs.ts",
     "run:ethereum": "ts-node src/ethereum.ts",
     "run:ens": "ts-node src/ens.ts"

@@ -2,12 +2,6 @@
 
 Before running any example you must run `yarn` in the `examples` folder
 
-## Hello World
-
-Invokes the logger wrap, which interacts with the logger plugin. It shows a console.log message from WASM world
-```
-$ yarn run:hello-world
-```
 ## File System
 
 Invokes the File System plugin; which creates, reads and deletes a file
@@ -34,6 +28,13 @@ $ npx polywrap infra up --modules=eth-ens-ipfs
 And now you can run the example:
 ```
 $ yarn run:ipfs
+```
+
+## Logger
+
+Invokes the logger wrap, which interacts with the logger plugin. It shows a console.log message from WASM world
+```
+$ yarn run:logger
 ```
 
 ## Ethereum
