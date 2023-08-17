@@ -26,6 +26,8 @@ $ yarn run:http
 
 Invoke the IPFS Client wrap; adds file to a local IPFS node, and then retrieves it.
 Before running this example, you must instantiate a local IPFS node by running the following command:
+
+_NOTE: This command requires Docker to be installed on your machine._
 ```
 $ npx polywrap infra up --modules=eth-ens-ipfs
 ```
