@@ -24,3 +24,4 @@ polywrap.deployment.txt
 **/__pycache__/
 **/dist/
 poetry.lock
+examples/yarn.lock
