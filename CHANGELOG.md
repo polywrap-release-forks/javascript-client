@@ -1,3 +1,7 @@
+# Polywrap Origin (0.12.2)
+## Chore
+* [PR-74](https://github.com/polywrap/javascript-client/pull/74) **Add `src/` and `README.md` to package artifacts**
+
 # Polywrap Origin (0.12.1)
 ## Bugs
 **`@polywrap/wrap-manifest-types-js`:**
