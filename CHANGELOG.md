@@ -1,3 +1,10 @@
+# Polywrap Origin (0.12.1)
+## Bugs
+**`@polywrap/wrap-manifest-types-js`:**
+* [PR-68](https://github.com/polywrap/javascript-client/pull/68) **Browser compilation fix**
+  * The "semver" sub-dependency (version `7.5.0`) has a problem building for the browser, upgrading to `7.5.4` fixes this.
+    * source: https://github.com/npm/node-semver/issues/554
+
 # Polywrap Origin (0.12.0)
 ## Features
 **`@polywrap/sys-config-bundle-js`:**

@@ -692,7 +692,7 @@ args: {
   "authority": "test",
   "path": "error"
 } 
-source: { file: "src/wrap/module/wrapped.rs", row: 35, col: 21 }`
+source: { file: "src/wrap/module/wrapped.rs", row: 43, col: 21 }`
     );
   });
 
@@ -745,7 +745,7 @@ args: {
   "authority": "test",
   "path": "error"
 } 
-source: { file: "src/wrap/module/wrapped.rs", row: 35, col: 21 }
+source: { file: "src/wrap/module/wrapped.rs", row: 43, col: 21 }
 
 Another exception was encountered during execution:
 WrapError: __wrap_abort: Test error
@@ -756,7 +756,7 @@ args: {
   "authority": "test",
   "path": "error"
 } 
-source: { file: "src/wrap/module/wrapped.rs", row: 35, col: 21 }`
+source: { file: "src/wrap/module/wrapped.rs", row: 43, col: 21 }`
     );
   });
 
