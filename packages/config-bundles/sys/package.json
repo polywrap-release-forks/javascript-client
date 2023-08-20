@@ -9,7 +9,9 @@
   "main": "build/index.js",
   "browser": "build/browser.js",
   "files": [
-    "build"
+    "src",
+    "build",
+    "README.md"
   ],
   "scripts": {
     "build": "rimraf ./build && tsc",

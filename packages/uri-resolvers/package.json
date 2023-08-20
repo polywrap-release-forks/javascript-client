@@ -9,7 +9,9 @@
   },
   "main": "build/index.js",
   "files": [
-    "build"
+    "src",
+    "build",
+    "README.md"
   ],
   "scripts": {
     "build": "yarn build:fast",

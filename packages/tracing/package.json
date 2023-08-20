@@ -9,7 +9,9 @@
   },
   "main": "build/index.js",
   "files": [
-    "build"
+    "src",
+    "build",
+    "README.md"
   ],
   "scripts": {
     "build": "rimraf ./build && tsc --project tsconfig.build.json",
