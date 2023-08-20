@@ -1,6 +1,6 @@
 {
   "name": "@polywrap/sys-config-bundle-js",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -19,19 +19,19 @@
   },
   "dependencies": {
     "@polywrap/concurrent-plugin-js": "~0.12.0",
-    "@polywrap/config-bundle-types-js": "0.12.0",
+    "@polywrap/config-bundle-types-js": "0.12.1",
     "@polywrap/datetime-plugin-js": "~0.12.0",
     "@polywrap/file-system-plugin-js": "~0.12.0",
     "@polywrap/http-plugin-js": "~0.12.0",
     "@polywrap/logger-plugin-js": "~0.12.0",
-    "@polywrap/uri-resolver-extensions-js": "0.12.0",
+    "@polywrap/uri-resolver-extensions-js": "0.12.1",
     "base64-to-uint8array": "1.0.0"
   },
   "peerDependencies": {
     "@polywrap/msgpack-js": "0.12.x"
   },
   "devDependencies": {
-    "@polywrap/wrap-manifest-types-js": "0.12.0",
+    "@polywrap/wrap-manifest-types-js": "0.12.1",
     "doc-snippets": "~1.0.0",
     "rimraf": "3.0.2",
     "ts-node": "10.9.1",
