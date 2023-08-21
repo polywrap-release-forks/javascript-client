@@ -8,6 +8,7 @@
   },
   "main": "build/index.js",
   "files": [
+    "src",
     "build"
   ],
   "scripts": {
