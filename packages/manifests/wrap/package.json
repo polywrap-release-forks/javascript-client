@@ -8,6 +8,11 @@
     "url": "https://github.com/polywrap/javascript-client.git"
   },
   "main": "./build/index.js",
+  "files": [
+    "src",
+    "build",
+    "README.md"
+  ],
   "scripts": {
     "build": "rimraf ./build && tsc --project tsconfig.build.json",
     "prebuild": "ts-node ./scripts/generate.ts",
