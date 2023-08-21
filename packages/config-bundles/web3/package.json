@@ -1,6 +1,6 @@
 {
   "name": "@polywrap/web3-config-bundle-js",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -18,11 +18,11 @@
     "lint": "eslint --color -c ../../../.eslintrc.js src/"
   },
   "dependencies": {
-    "@polywrap/config-bundle-types-js": "0.12.1",
+    "@polywrap/config-bundle-types-js": "0.12.2",
     "@polywrap/ethereum-wallet-js": "~0.1.0",
-    "@polywrap/sys-config-bundle-js": "0.12.1",
-    "@polywrap/uri-resolver-extensions-js": "0.12.1",
-    "@polywrap/wasm-js": "0.12.1",
+    "@polywrap/sys-config-bundle-js": "0.12.2",
+    "@polywrap/uri-resolver-extensions-js": "0.12.2",
+    "@polywrap/wasm-js": "0.12.2",
     "base64-to-uint8array": "1.0.0"
   },
   "devDependencies": {
